@@ -1,4 +1,4 @@
-package cf.spacebird;
+package cf.spaceybird;
 
 import java.awt.geom.Point2D;
 import com.badlogic.gdx.math.Vector2;
