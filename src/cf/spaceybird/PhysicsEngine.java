@@ -9,7 +9,7 @@ various object physics (e.g. gravitational attraction, rising/falling)
 */
 
 public class PhysicsEngine {
-    public static final float GRAV_CONST = 1.0f;
+    public static final float GRAV_CONST = 1f;
     
     //Empty PhysicsEngine constructor
     public PhysicsEngine() {       
