@@ -1,5 +1,8 @@
 package cf.spaceybird;
 
+import cf.spaceybird.actors.Obstacle;
+import cf.spaceybird.actors.Player;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 

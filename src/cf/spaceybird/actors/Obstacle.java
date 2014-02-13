@@ -1,4 +1,4 @@
-package cf.spaceybird;
+package cf.spaceybird.actors;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
