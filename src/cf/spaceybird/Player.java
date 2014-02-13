@@ -33,5 +33,9 @@ public class Player {
 	public float getMass() {
 		return this.mass;
 	}
-
+	
+	//Sets the position of the player
+	public void setPosition(float x, float y) {
+		this.position.set(x,y);
+	}
 }
