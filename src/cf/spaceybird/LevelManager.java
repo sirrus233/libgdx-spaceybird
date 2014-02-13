@@ -5,17 +5,25 @@ import com.badlogic.gdx.utils.Array;
 
 public class LevelManager {
     
-	private static Player player;
+	private static Player player = new Player(new Vector2(0,0));
 	private static Array<Obstacle> obstacles = new Array<Obstacle>(false, 16);
+	private static int currentLevel = 1;
 	
-	//Constructor that creates the demo level
-	public LevelManager() {
-		createDemoLevel();
-	}
-	
-	public static void createDemoLevel() {
-		player = new Player(new Vector2(3,3));		
-		obstacles.add(new Obstacle(new Vector2(8,8)));
+	public static void setLevel(int level) {
+		obstacles.clear();
+		switch(level) {
+		case 1:
+			player.setPosition(3f,3f);		
+			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
+			break;
+		case 2:
+			player.setPosition(8f,8f);	
+			obstacles.add(new Obstacle(new Vector2(100,100), 0.5f));
+			break;	
+		default:
+			player.setPosition(100f,100f);	
+			obstacles.add(new Obstacle(new Vector2(100,100), 0.5f));
+		}
 	}
 	
 	//Returns the player object
