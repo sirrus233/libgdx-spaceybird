@@ -14,7 +14,9 @@ public class Renderer {
 	
 	private static OrthographicCamera cam;
 	private static ShapeRenderer debugRenderer = new ShapeRenderer();
-
+	private static float ppuX; //pixels per unit on the X axis
+	private static float ppuY; //pixels per unit on the Y axis
+	
 	//This method primarily handles the initialization of the Renderer's camera
 	public static void init() {
 		//A new OrthographicCamera is created, with relative aspect ratio defined in its parameters
