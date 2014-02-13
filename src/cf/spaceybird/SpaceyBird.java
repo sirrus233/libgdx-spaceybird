@@ -1,8 +1,9 @@
 package cf.spaceybird;
 
-import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
+import cf.spaceybird.screens.GameScreen;
 
-public class SpaceyBird implements ApplicationListener {
+public class SpaceyBird extends Game {
 
 	public SpaceyBird() {
 		// TODO Auto-generated constructor stub
@@ -10,38 +11,8 @@ public class SpaceyBird implements ApplicationListener {
 
 	@Override
 	public void create() {
-		// TODO Auto-generated method stub
+		Renderer.init();
+		setScreen(new GameScreen());
 
 	}
-
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void render() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

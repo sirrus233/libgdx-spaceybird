@@ -17,7 +17,7 @@ public class LevelManager {
 		player = new Player(new Vector2(3,3));		
 		obstacles.add(new Obstacle(new Vector2(8,8)));
 	}
-    
+	
 	//Returns the player object
 	public Player getPlayer() {
 		return this.player;
