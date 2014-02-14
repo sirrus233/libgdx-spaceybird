@@ -1,5 +1,6 @@
 package cf.spaceybird.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -17,6 +18,9 @@ public abstract class ScreenTemplate implements Screen {
 	public static void init() {
 		aspectX = 16;
 		aspectY = 9;
+		
+		ppuX = Gdx.graphics.getWidth()/aspectX;
+		ppuY = Gdx.graphics.getHeight()/aspectY;
 		
 		//A new OrthographicCamera is created, with relative aspect ratio defined in its parameters
 		//The camera view is then shifted to point at only the first quadrant of the graph

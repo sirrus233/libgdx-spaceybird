@@ -2,20 +2,30 @@ package cf.spaceybird.screens;
 
 import cf.spaceybird.LevelManager;
 import cf.spaceybird.actors.Obstacle;
+import cf.spaceybird.actors.Player;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends ScreenTemplate {
 	
 	private Game game;
+	private Player player;
+	private Array<Obstacle> obstacles;
+	private boolean grabbingPlayer;
 	
 	public GameScreen(Game g) {
 		// TODO Auto-generated constructor stub
 		this.game = g;
+		this.grabbingPlayer = false;
+		LevelManager.setLevel(1);
+		this.player = LevelManager.getPlayer();
+		this.obstacles = LevelManager.getObstacles();
 	}
 
 	@Override
@@ -25,16 +35,30 @@ public class GameScreen extends ScreenTemplate {
 		debugRenderer.setProjectionMatrix(cam.combined);
         debugRenderer.begin(ShapeType.Filled);
         debugRenderer.setColor(new Color(1, 0, 0, 1));
-        for (Obstacle o : LevelManager.getObstacles()) {
+        for (Obstacle o : this.obstacles) {
         	debugRenderer.circle(o.getBounds().x, o.getBounds().y, o.getBounds().radius, 1200);
         }
+        debugRenderer.setColor(new Color(0, 1, 0, 1));
+        debugRenderer.circle(this.player.getBounds().x, this.player.getBounds().y, this.player.getBounds().radius, 1200);
         debugRenderer.end();
 	}
 
 	@Override
 	public void update() {
-		LevelManager.setLevel(1);
+		int mouseX = Gdx.input.getX();
+		int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+		int mouseDeltaX = Gdx.input.getDeltaX();
+		int mouseDeltaY = -Gdx.input.getDeltaY();
 		
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(mouseX/ppuX, mouseY/ppuY)) {
+			this.grabbingPlayer = true;
+		} else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+			this.grabbingPlayer = false;
+		}
+		
+		if (this.grabbingPlayer) {
+				this.player.updatePosition(mouseDeltaX/ppuX, mouseDeltaY/ppuY);
+		}
 	}
 
 }
