@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Player {
 
-	private static final float SPEED = 1f;
 	private static final float SIZE = 1f;
 	
 	private Vector2 position = new Vector2();
@@ -35,6 +34,26 @@ public class Player {
 	
 	public float getMass() {
 		return this.mass;
+	}
+	
+	public Vector2 getVelocity() {
+		return this.velocity;
+	}
+	
+	public void setVelocity(Vector2 v) {
+		this.velocity = v;
+	}
+	
+	public Vector2 getAcceleration() {
+		return this.acceleration;
+	}
+	
+	public void setAcceleration(Vector2 a) {
+		this.acceleration = a;
+	}
+	
+	public Vector2 getPosition() {
+		return this.position;
 	}
 	
 	//Sets the position of the player
