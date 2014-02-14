@@ -16,15 +16,15 @@ public class LevelManager {
 		obstacles.clear();
 		switch(level) {
 		case 1:
-			player.setPosition(3f,3f);		
+			player.setPosition(3,3);		
 			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
 			break;
 		case 2:
-			player.setPosition(8f,8f);	
+			player.setPosition(8,8);	
 			obstacles.add(new Obstacle(new Vector2(100,100), 0.5f));
 			break;	
 		default:
-			player.setPosition(100f,100f);	
+			player.setPosition(100,100);	
 			obstacles.add(new Obstacle(new Vector2(100,100), 0.5f));
 		}
 	}
