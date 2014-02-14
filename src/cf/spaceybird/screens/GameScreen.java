@@ -1,6 +1,7 @@
 package cf.spaceybird.screens;
 
 import cf.spaceybird.LevelManager;
+import cf.spaceybird.PhysicsEngine;
 import cf.spaceybird.actors.Obstacle;
 import cf.spaceybird.actors.Player;
 
@@ -10,6 +11,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends ScreenTemplate {
@@ -43,8 +45,8 @@ public class GameScreen extends ScreenTemplate {
         debugRenderer.end();
 	}
 
-	@Override
-	public void update() {
+	public void update(float delta) {
+		System.out.println(player.getPosition().x+","+player.getPosition().y);
 		int mouseX = Gdx.input.getX();
 		int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
 		int mouseDeltaX = Gdx.input.getDeltaX();
@@ -58,6 +60,14 @@ public class GameScreen extends ScreenTemplate {
 		
 		if (this.grabbingPlayer) {
 				this.player.updatePosition(mouseDeltaX/ppuX, mouseDeltaY/ppuY);
+		} else {
+			Vector2 gravForce = new Vector2();
+			for (Obstacle o : this.obstacles) {
+				gravForce = gravForce.add(PhysicsEngine.getGravForce(this.player, o));
+			}
+			this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(),gravForce));
+			this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
+			this.player.updatePosition(this.player.getVelocity().scl(delta));
 		}
 	}
 
