@@ -1,5 +1,8 @@
 package cf.spaceybird;
 
+import cf.spaceybird.actors.Obstacle;
+import cf.spaceybird.actors.Player;
+
 import com.badlogic.gdx.math.Vector2;
 
 /*
@@ -22,6 +25,10 @@ public class PhysicsEngine {
         force.scl(magnitude);
         
         return force;
+    }
+    
+    public static Vector2 getGravForce(Player p, Obstacle o) {
+    	return getGravForce(p.getPosition(), p.getMass(), o.getPosition(), o.getMass());
     }
     
     public static Vector2 getAcceleration(float mass, Vector2 force) {
