@@ -11,8 +11,7 @@ public class SpaceyBird extends Game {
 
 	@Override
 	public void create() {
-		Renderer.init();
-		setScreen(new GameScreen());
-
+		Setup.init();
+		setScreen(new GameScreen(this));
 	}
 }
