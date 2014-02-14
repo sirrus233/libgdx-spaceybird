@@ -62,9 +62,17 @@ public class Player {
 		this.bounds.setPosition(this.position);
 	}
 	
+	public void setPosition(Vector2 p) {
+		this.setPosition(p.x, p.y);
+	}
+	
 	public void updatePosition(float deltaX, float deltaY) {
 		this.position.x += deltaX;
 		this.position.y += deltaY;
 		this.bounds.setPosition(this.position);
+	}
+	
+	public void updatePosition(Vector2 deltaP) {
+		this.updatePosition(deltaP.x, deltaP.y);
 	}
 }
