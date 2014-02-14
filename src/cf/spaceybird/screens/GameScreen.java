@@ -26,7 +26,7 @@ public class GameScreen extends ScreenTemplate {
         debugRenderer.begin(ShapeType.Filled);
         debugRenderer.setColor(new Color(1, 0, 0, 1));
         for (Obstacle o : LevelManager.getObstacles()) {
-        	debugRenderer.circle(o.getPosition().x, o.getPosition().y, o.getRadius(), 1200);
+        	debugRenderer.circle(o.getBounds().x, o.getBounds().y, o.getBounds().radius, 1200);
         }
         debugRenderer.end();
 	}

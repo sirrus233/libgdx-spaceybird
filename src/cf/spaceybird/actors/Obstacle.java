@@ -29,17 +29,12 @@ public class Obstacle {
 		this.bounds.radius = radius;
 	}
 	
-	public Vector2 getPosition() {
-		return this.position;
+	public Circle getBounds() {
+		return bounds;
 	}
 	
 	public float getMass() {
 		return this.mass;
 	}
-	
-	public float getRadius() {
-		return this.bounds.radius;
-	}
-
 
 }
