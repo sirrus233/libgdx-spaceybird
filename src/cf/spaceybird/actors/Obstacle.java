@@ -37,6 +37,10 @@ public class Obstacle {
 		return this.mass;
 	}
 	
+	public Vector2 getPosition() {
+		return this.position;
+	}
+	
 	public void updatePosition(float deltaX, float deltaY) {
 		this.position.x += deltaX;
 		this.position.y += deltaY;
