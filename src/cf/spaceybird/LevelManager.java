@@ -38,4 +38,8 @@ public class LevelManager {
 	public static Array<Obstacle> getObstacles() {
 		return obstacles;
 	}
+	
+	public static int getCurrentLevel() {
+		return currentLevel;
+	}
 }
