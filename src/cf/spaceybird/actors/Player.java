@@ -5,13 +5,13 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Player {
 
-	private static final float SIZE = 1f;
+	private static final float SIZE = 1;
 	
 	private Vector2 position = new Vector2();
 	private Vector2 velocity = new Vector2();
 	private Vector2 acceleration = new Vector2();
 	private Circle bounds = new Circle();
-	private float mass = 1f;
+	private float mass = 1;
 	
 	//Constructor for a new player object at the input position vector, with the specified mass.
 	//Initial velocityand acceleration are both 0. Mass is left default.
