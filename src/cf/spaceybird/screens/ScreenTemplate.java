@@ -33,13 +33,13 @@ public abstract class ScreenTemplate implements Screen {
 	
 	@Override
 	public void render(float delta) {
-		update();
+		update(delta);
 		draw();
 	}
 	
 	public abstract void draw();
 	
-	public abstract void update();
+	public abstract void update(float delta);
 
 	@Override
 	public void resize(int width, int height) {
