@@ -29,7 +29,10 @@ public class Player {
 		this.bounds.radius = SIZE;
 	}
 	
-	//Returns the players mass
+	public Circle getBounds() {
+		return bounds;
+	}
+	
 	public float getMass() {
 		return this.mass;
 	}
@@ -37,5 +40,12 @@ public class Player {
 	//Sets the position of the player
 	public void setPosition(float x, float y) {
 		this.position.set(x,y);
+		this.bounds.setPosition(this.position);
+	}
+	
+	public void updatePosition(float deltaX, float deltaY) {
+		this.position.x += deltaX;
+		this.position.y += deltaY;
+		this.bounds.setPosition(this.position);
 	}
 }
