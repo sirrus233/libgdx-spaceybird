@@ -23,7 +23,7 @@ public class LevelManager {
 		case 2:
 			initPlayer(4,4);
 			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
-			obstacles.add(new Obstacle(new Vector2(2,5), 0.5f));
+			obstacles.add(new Obstacle(new Vector2(2,5), 1.5f));
 			break;	
 		default:
 			initPlayer(3,3);		
