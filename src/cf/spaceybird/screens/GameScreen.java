@@ -64,7 +64,7 @@ public class GameScreen extends ScreenTemplate {
 			
 			Vector2 gravForce = new Vector2();
 			for (Obstacle o : this.obstacles) {
-				if (o.getBounds().contains(this.player.getBounds())) {
+				if (o.getBounds().overlaps(this.player.getBounds())) {
 					this.player.setPosition(LevelManager.getStartPos());
 					this.player.stop();
 				}
