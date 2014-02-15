@@ -1,5 +1,6 @@
 package cf.spaceybird.screens;
 
+import cf.spaceybird.Assets;
 import cf.spaceybird.LevelManager;
 import cf.spaceybird.PhysicsEngine;
 import cf.spaceybird.actors.Obstacle;
@@ -34,15 +35,38 @@ public class GameScreen extends ScreenTemplate {
 	public void draw() {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		debugRenderer.setProjectionMatrix(cam.combined);
-        debugRenderer.begin(ShapeType.Filled);
-        debugRenderer.setColor(new Color(1, 0, 0, 1));
-        for (Obstacle o : this.obstacles) {
-        	debugRenderer.circle(o.getBounds().x, o.getBounds().y, o.getBounds().radius, 1200);
-        }
-        debugRenderer.setColor(new Color(0, 1, 0, 1));
-        debugRenderer.circle(this.player.getBounds().x, this.player.getBounds().y, this.player.getBounds().radius, 1200);
-        debugRenderer.end();
+		batch.setProjectionMatrix(cam.combined);
+		batch.begin();
+		batch.disableBlending();
+		batch.draw(Assets.background, 0, 0, aspectX, aspectY);
+		batch.enableBlending();
+		batch.draw(Assets.spaceyBird, this.player.getBounds().x - this.player.getBounds().radius, 
+				this.player.getBounds().y - this.player.getBounds().radius, 
+				2*this.player.getBounds().radius, 2*this.player.getBounds().radius);
+		for (Obstacle o : this.obstacles) {
+			if (o.getBounds().radius >= 1.5) {
+				batch.draw(Assets.planetLarge, o.getBounds().x - o.getBounds().radius, 
+						o.getBounds().y - o.getBounds().radius, 2*o.getBounds().radius, 2*o.getBounds().radius);	
+		
+			} else if (o.getBounds().radius >= 1.0) {
+				batch.draw(Assets.planetMedium, o.getBounds().x - o.getBounds().radius, 
+						o.getBounds().y - o.getBounds().radius, 2*o.getBounds().radius, 2*o.getBounds().radius);
+			} else {
+				batch.draw(Assets.planetSmall, o.getBounds().x - o.getBounds().radius, 
+						o.getBounds().y - o.getBounds().radius, 2*o.getBounds().radius, 2*o.getBounds().radius);				
+			}
+		}	
+		batch.end();
+		if (DEBUG) {
+			debugRenderer.setProjectionMatrix(cam.combined);
+	        debugRenderer.begin(ShapeType.Line);
+	        debugRenderer.setColor(new Color(1, 0, 0, 1));
+	        debugRenderer.circle(this.player.getBounds().x, this.player.getBounds().y, this.player.getBounds().radius, 1200);
+	        for (Obstacle o : this.obstacles) {
+	        	debugRenderer.circle(o.getBounds().x, o.getBounds().y, o.getBounds().radius, 1200);
+	        }
+	        debugRenderer.end();
+		}
 	}
 
 	public void update(float delta) {

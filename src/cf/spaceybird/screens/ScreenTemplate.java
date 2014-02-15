@@ -3,11 +3,14 @@ package cf.spaceybird.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class ScreenTemplate implements Screen {
+	final boolean DEBUG = false;
 	
 	static OrthographicCamera cam;
+	static SpriteBatch batch;
 	static ShapeRenderer debugRenderer;
 	
 	static float aspectX;
@@ -28,6 +31,7 @@ public abstract class ScreenTemplate implements Screen {
     	cam.position.set(aspectX/2, aspectY/2, 0);
     	cam.update();
     	
+    	batch = new SpriteBatch();
     	debugRenderer = new ShapeRenderer();
 	}
 	
