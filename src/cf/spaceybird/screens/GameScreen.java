@@ -53,7 +53,7 @@ public class GameScreen extends ScreenTemplate {
 		
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(mouseX/ppuX, mouseY/ppuY)) {
 			this.grabbingPlayer = true;
-			this.player.setVelocity(new Vector2());
+			this.player.stop();
 		} else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			this.grabbingPlayer = false;
 		}
@@ -64,6 +64,10 @@ public class GameScreen extends ScreenTemplate {
 			
 			Vector2 gravForce = new Vector2();
 			for (Obstacle o : this.obstacles) {
+				if (o.getBounds().contains(this.player.getBounds())) {
+					this.player.setPosition(LevelManager.getStartPos());
+					this.player.stop();
+				}
 				gravForce.add(PhysicsEngine.getGravForce(this.player, o));
 			}
 			this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
