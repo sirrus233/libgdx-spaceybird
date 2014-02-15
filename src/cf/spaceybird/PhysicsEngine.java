@@ -11,7 +11,7 @@ various object physics (e.g. gravitational attraction, kinematics)
 */
 
 public class PhysicsEngine {
-    public static final float GRAV_CONST = 100;
+    public static final float GRAV_CONST = 1;
     
     //Takes input data on two objects, represented as a position vector and mass
     //for each, and calculates the gravitational force between them. The force is
@@ -32,11 +32,12 @@ public class PhysicsEngine {
     }
     
     public static Vector2 getAcceleration(float mass, Vector2 force) {
-    	return force.div(mass);
+    	return new Vector2(force).div(mass);
     }
     
     public static Vector2 getVelocity(Vector2 initialVel, Vector2 acc, float timestep) {
-    	return initialVel.add(acc.scl(timestep));
+    	Vector2 additionalVel = new Vector2(acc).scl(timestep);
+    	return new Vector2(initialVel).add(additionalVel);
     }
     
     public static Vector2 getVelocity(Vector2 initialVel, Vector2 force, float mass, float timestep) {

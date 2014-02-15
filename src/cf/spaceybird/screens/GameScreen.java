@@ -25,7 +25,7 @@ public class GameScreen extends ScreenTemplate {
 		// TODO Auto-generated constructor stub
 		this.game = g;
 		this.grabbingPlayer = false;
-		LevelManager.setLevel(1);
+		LevelManager.setLevel(2);
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
 	}
@@ -46,7 +46,6 @@ public class GameScreen extends ScreenTemplate {
 	}
 
 	public void update(float delta) {
-		System.out.println(player.getPosition().x+","+player.getPosition().y);
 		int mouseX = Gdx.input.getX();
 		int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
 		int mouseDeltaX = Gdx.input.getDeltaX();
@@ -54,6 +53,7 @@ public class GameScreen extends ScreenTemplate {
 		
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(mouseX/ppuX, mouseY/ppuY)) {
 			this.grabbingPlayer = true;
+			this.player.stop();
 		} else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			this.grabbingPlayer = false;
 		}
@@ -61,11 +61,16 @@ public class GameScreen extends ScreenTemplate {
 		if (this.grabbingPlayer) {
 				this.player.updatePosition(mouseDeltaX/ppuX, mouseDeltaY/ppuY);
 		} else {
+			
 			Vector2 gravForce = new Vector2();
 			for (Obstacle o : this.obstacles) {
-				gravForce = gravForce.add(PhysicsEngine.getGravForce(this.player, o));
+				if (o.getBounds().overlaps(this.player.getBounds())) {
+					this.player.setPosition(LevelManager.getStartPos());
+					this.player.stop();
+				}
+				gravForce.add(PhysicsEngine.getGravForce(this.player, o));
 			}
-			this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(),gravForce));
+			this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
 			this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
 			this.player.updatePosition(this.player.getVelocity().scl(delta));
 		}

@@ -8,7 +8,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class LevelManager {
     
-	private static Player player = new Player(new Vector2(0,0));
+	private static Player player = new Player(new Vector2());
+	private static Vector2 startPos = new Vector2();
 	private static Array<Obstacle> obstacles = new Array<Obstacle>(false, 16);
 	private static int currentLevel = 1;
 	
@@ -16,17 +17,23 @@ public class LevelManager {
 		obstacles.clear();
 		switch(level) {
 		case 1:
-			player.setPosition(3,3);		
+			initPlayer(3,3);		
 			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
 			break;
 		case 2:
-			player.setPosition(8,8);	
-			obstacles.add(new Obstacle(new Vector2(100,100), 0.5f));
+			initPlayer(4,4);
+			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
+			obstacles.add(new Obstacle(new Vector2(2,5), 0.5f));
 			break;	
 		default:
-			player.setPosition(100,100);	
-			obstacles.add(new Obstacle(new Vector2(100,100), 0.5f));
+			initPlayer(3,3);		
+			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
 		}
+	}
+	
+	private static void initPlayer(float x, float y) {
+		startPos.set(x,y);
+		player.setPosition(startPos);
 	}
 	
 	//Returns the player object
@@ -41,5 +48,9 @@ public class LevelManager {
 	
 	public static int getCurrentLevel() {
 		return currentLevel;
+	}
+	
+	public static Vector2 getStartPos() {
+		return new Vector2(startPos);
 	}
 }
