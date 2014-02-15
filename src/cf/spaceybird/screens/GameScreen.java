@@ -21,6 +21,8 @@ public class GameScreen extends ScreenTemplate {
 	private Player player;
 	private Array<Obstacle> obstacles;
 	private boolean grabbingPlayer;
+	private Vector2 mouse;
+	private Vector2 mouseDelta;
 	
 	public GameScreen(Game g) {
 		// TODO Auto-generated constructor stub
@@ -29,6 +31,8 @@ public class GameScreen extends ScreenTemplate {
 		LevelManager.setLevel(2);
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
+		this.mouse = new Vector2();
+		this.mouseDelta = new Vector2();
 	}
 
 	@Override
@@ -70,12 +74,10 @@ public class GameScreen extends ScreenTemplate {
 	}
 
 	public void update(float delta) {
-		int mouseX = Gdx.input.getX();
-		int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-		int mouseDeltaX = Gdx.input.getDeltaX();
-		int mouseDeltaY = -Gdx.input.getDeltaY();
+		this.mouse.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+		this.mouseDelta.set(Gdx.input.getDeltaX(), -Gdx.input.getDeltaY());
 		
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(mouseX/ppuX, mouseY/ppuY)) {
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(new Vector2(mouse).div(ppuX,ppuY))) {
 			this.grabbingPlayer = true;
 			this.player.stop();
 		} else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
@@ -83,7 +85,7 @@ public class GameScreen extends ScreenTemplate {
 		}
 		
 		if (this.grabbingPlayer) {
-				this.player.updatePosition(mouseDeltaX/ppuX, mouseDeltaY/ppuY);
+			this.player.updatePosition(new Vector2(mouseDelta).div(ppuX,ppuY));
 		} else {
 			
 			Vector2 gravForce = new Vector2();
