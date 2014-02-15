@@ -11,7 +11,7 @@ various object physics (e.g. gravitational attraction, kinematics)
 */
 
 public class PhysicsEngine {
-    public static final float GRAV_CONST = 10;
+    public static final float GRAV_CONST = 1;
     
     //Takes input data on two objects, represented as a position vector and mass
     //for each, and calculates the gravitational force between them. The force is

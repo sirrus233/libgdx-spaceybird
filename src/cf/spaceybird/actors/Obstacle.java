@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Obstacle {
 	
-	private static final float DEFAULT_MASS = 100;
+	private static final float DEFAULT_MASS = 1;
 	
 	private Vector2 position = new Vector2();
 	private Circle bounds = new Circle();
