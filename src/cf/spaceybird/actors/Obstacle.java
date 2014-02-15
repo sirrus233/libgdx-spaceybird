@@ -38,7 +38,7 @@ public class Obstacle {
 	}
 	
 	public Vector2 getPosition() {
-		return this.position;
+		return new Vector2(this.position);
 	}
 	
 	public void updatePosition(float deltaX, float deltaY) {

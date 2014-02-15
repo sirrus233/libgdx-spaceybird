@@ -38,7 +38,7 @@ public class Player {
 	}
 	
 	public Vector2 getVelocity() {
-		return this.velocity;
+		return new Vector2(this.velocity);
 	}
 	
 	public void setVelocity(Vector2 v) {
@@ -46,7 +46,7 @@ public class Player {
 	}
 	
 	public Vector2 getAcceleration() {
-		return this.acceleration;
+		return new Vector2(this.acceleration);
 	}
 	
 	public void setAcceleration(Vector2 a) {
@@ -54,7 +54,7 @@ public class Player {
 	}
 	
 	public Vector2 getPosition() {
-		return this.position;
+		return new Vector2(this.position);
 	}
 	
 	//Sets the position of the player
