@@ -91,10 +91,10 @@ public class GameScreen extends ScreenTemplate {
 		}
 		
 		if (this.grabbingPlayer) {
-			//System.out.println(mouse.dst(LevelManager.getStartPos()));
-			//if (mouse.dst(LevelManager.getStartPos()) < 2) {
+			System.out.println(mouse.dst(LevelManager.getStartPos()));
+			if (mouseNorm.dst(LevelManager.getStartPos()) < 2) {
 				this.player.updatePosition(this.mouseDeltaNorm);
-			//}
+			}
 		} else {
 			
 			Vector2 gravForce = new Vector2();
