@@ -25,7 +25,7 @@ public class GameScreen extends ScreenTemplate {
 		// TODO Auto-generated constructor stub
 		this.game = g;
 		this.grabbingPlayer = false;
-		LevelManager.setLevel(1);
+		LevelManager.setLevel(2);
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
 	}
