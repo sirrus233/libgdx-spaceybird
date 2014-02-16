@@ -101,7 +101,8 @@ public class GameScreen extends ScreenTemplate {
 				this.player.setPosition(newPosition);
 			}
 			if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-				//TODO set velocity vector based on launch angle and direction
+				Vector2 launchDirection = new Vector2(LevelManager.getStartPos()).sub(this.player.getPosition());
+				this.player.setVelocity(launchDirection.scl(5));
 				this.state = State.LAUNCHED;
 			}
 			break;
