@@ -16,11 +16,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends ScreenTemplate {
+	private enum State {
+		WAITING, AIMING, LAUNCHED
+	}
 	
 	private Game game;
 	private Player player;
 	private Array<Obstacle> obstacles;
-	private boolean grabbingPlayer;
+	private State state;
 	private Vector2 mouse;
 	private Vector2 mouseDelta;
 	private Vector2 mouseNorm;
@@ -29,7 +32,7 @@ public class GameScreen extends ScreenTemplate {
 	public GameScreen(Game g) {
 		// TODO Auto-generated constructor stub
 		this.game = g;
-		this.grabbingPlayer = false;
+		this.state = State.WAITING;
 		LevelManager.setLevel(2);
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
@@ -83,31 +86,41 @@ public class GameScreen extends ScreenTemplate {
 		this.mouseNorm.set(new Vector2(mouse).div(ppuX,ppuY));
 		this.mouseDeltaNorm.set(new Vector2(mouseDelta).div(ppuX,ppuY));
 		
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(this.mouseNorm)) {
-			this.grabbingPlayer = true;
-			this.player.stop();
-		} else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			this.grabbingPlayer = false;
-		}
-		
-		if (this.grabbingPlayer) {
-			System.out.println(mouse.dst(LevelManager.getStartPos()));
+		switch(state) {
+		case WAITING:
+			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(this.mouseNorm)) {
+				this.state = State.AIMING;
+			}
+			break;
+		case AIMING:
 			if (mouseNorm.dst(LevelManager.getStartPos()) < 2) {
 				this.player.updatePosition(this.mouseDeltaNorm);
+			} else {
+				Vector2 newDirection = new Vector2(mouseNorm).sub(LevelManager.getStartPos()).nor().scl(2);
+				Vector2 newPosition = new Vector2(LevelManager.getStartPos()).add(newDirection);
+				this.player.setPosition(newPosition);
 			}
-		} else {
-			
+			if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+				//TODO set velocity vector based on launch angle and direction
+				this.state = State.LAUNCHED;
+			}
+			break;
+		case LAUNCHED:
 			Vector2 gravForce = new Vector2();
 			for (Obstacle o : this.obstacles) {
 				if (o.getBounds().overlaps(this.player.getBounds())) {
 					this.player.setPosition(LevelManager.getStartPos());
 					this.player.stop();
+					this.state = State.WAITING;
 				}
 				gravForce.add(PhysicsEngine.getGravForce(this.player, o));
 			}
 			this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
 			this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
 			this.player.updatePosition(this.player.getVelocity().scl(delta));
+			break;
+		default:
+			System.out.println("Error: Invalid state accessed from GameScreen!");
 		}
 	}
 
