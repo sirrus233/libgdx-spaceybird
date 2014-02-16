@@ -16,19 +16,30 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends ScreenTemplate {
+	private enum State {
+		WAITING, AIMING, LAUNCHED
+	}
 	
 	private Game game;
 	private Player player;
 	private Array<Obstacle> obstacles;
-	private boolean grabbingPlayer;
+	private State state;
+	private Vector2 mouse;
+	private Vector2 mouseDelta;
+	private Vector2 mouseNorm;
+	private Vector2 mouseDeltaNorm;
 	
 	public GameScreen(Game g) {
 		// TODO Auto-generated constructor stub
 		this.game = g;
-		this.grabbingPlayer = false;
+		this.state = State.WAITING;
 		LevelManager.setLevel(2);
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
+		this.mouse = new Vector2();
+		this.mouseDelta = new Vector2();
+		this.mouseNorm = new Vector2();
+		this.mouseDeltaNorm = new Vector2();
 	}
 
 	@Override
@@ -70,33 +81,47 @@ public class GameScreen extends ScreenTemplate {
 	}
 
 	public void update(float delta) {
-		int mouseX = Gdx.input.getX();
-		int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-		int mouseDeltaX = Gdx.input.getDeltaX();
-		int mouseDeltaY = -Gdx.input.getDeltaY();
+		this.mouse.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+		this.mouseDelta.set(Gdx.input.getDeltaX(), -Gdx.input.getDeltaY());
+		this.mouseNorm.set(new Vector2(mouse).div(ppuX,ppuY));
+		this.mouseDeltaNorm.set(new Vector2(mouseDelta).div(ppuX,ppuY));
 		
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(mouseX/ppuX, mouseY/ppuY)) {
-			this.grabbingPlayer = true;
-			this.player.stop();
-		} else if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			this.grabbingPlayer = false;
-		}
-		
-		if (this.grabbingPlayer) {
-				this.player.updatePosition(mouseDeltaX/ppuX, mouseDeltaY/ppuY);
-		} else {
-			
+		switch(state) {
+		case WAITING:
+			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(this.mouseNorm)) {
+				this.state = State.AIMING;
+			}
+			break;
+		case AIMING:
+			if (mouseNorm.dst(LevelManager.getStartPos()) < 2) {
+				this.player.updatePosition(this.mouseDeltaNorm);
+			} else {
+				Vector2 newDirection = new Vector2(mouseNorm).sub(LevelManager.getStartPos()).nor().scl(2);
+				Vector2 newPosition = new Vector2(LevelManager.getStartPos()).add(newDirection);
+				this.player.setPosition(newPosition);
+			}
+			if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+				Vector2 launchDirection = new Vector2(LevelManager.getStartPos()).sub(this.player.getPosition());
+				this.player.setVelocity(launchDirection.scl(5));
+				this.state = State.LAUNCHED;
+			}
+			break;
+		case LAUNCHED:
 			Vector2 gravForce = new Vector2();
 			for (Obstacle o : this.obstacles) {
 				if (o.getBounds().overlaps(this.player.getBounds())) {
 					this.player.setPosition(LevelManager.getStartPos());
 					this.player.stop();
+					this.state = State.WAITING;
 				}
 				gravForce.add(PhysicsEngine.getGravForce(this.player, o));
 			}
 			this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
 			this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
 			this.player.updatePosition(this.player.getVelocity().scl(delta));
+			break;
+		default:
+			System.out.println("Error: Invalid state accessed from GameScreen!");
 		}
 	}
 
