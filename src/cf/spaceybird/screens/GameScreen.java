@@ -12,6 +12,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -23,6 +24,7 @@ public class GameScreen extends ScreenTemplate {
 	private Game game;
 	private Player player;
 	private Array<Obstacle> obstacles;
+	private Circle goal;
 	private State state;
 	private Vector2 mouse;
 	private Vector2 mouseDelta;
@@ -33,13 +35,15 @@ public class GameScreen extends ScreenTemplate {
 		// TODO Auto-generated constructor stub
 		this.game = g;
 		this.state = State.WAITING;
-		LevelManager.setLevel(2);
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
+		this.goal = LevelManager.getGoal();
 		this.mouse = new Vector2();
 		this.mouseDelta = new Vector2();
 		this.mouseNorm = new Vector2();
 		this.mouseDeltaNorm = new Vector2();
+		
+		LevelManager.setLevel(1);
 	}
 
 	@Override
@@ -66,7 +70,9 @@ public class GameScreen extends ScreenTemplate {
 				batch.draw(Assets.planetSmall, o.getBounds().x - o.getBounds().radius, 
 						o.getBounds().y - o.getBounds().radius, 2*o.getBounds().radius, 2*o.getBounds().radius);				
 			}
-		}	
+		}
+		batch.draw(Assets.satellite, this.goal.x - this.goal.radius, this.goal.y - this.goal.radius, 
+				2*this.goal.radius, 2*this.goal.radius);
 		batch.end();
 		if (DEBUG) {
 			debugRenderer.setProjectionMatrix(cam.combined);
@@ -108,21 +114,40 @@ public class GameScreen extends ScreenTemplate {
 			break;
 		case LAUNCHED:
 			Vector2 gravForce = new Vector2();
+			boolean hitObstacle = false;
 			for (Obstacle o : this.obstacles) {
 				if (o.getBounds().overlaps(this.player.getBounds())) {
-					this.player.setPosition(LevelManager.getStartPos());
-					this.player.stop();
-					this.state = State.WAITING;
+					hitObstacle = true;
+					break;
 				}
 				gravForce.add(PhysicsEngine.getGravForce(this.player, o));
 			}
-			this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
-			this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
-			this.player.updatePosition(this.player.getVelocity().scl(delta));
+			
+			if (hitObstacle) {
+				resetPlayer();
+			} else if (this.goal.overlaps(this.player.getBounds())) {
+				LevelManager.nextLevel();
+				resetPlayer();
+			} else if (this.player.getBounds().x > aspectX + this.player.getBounds().radius ||
+					this.player.getBounds().x < -this.player.getBounds().radius ||
+					this.player.getBounds().y > aspectY + this.player.getBounds().radius ||
+					this.player.getBounds().y < -this.player.getBounds().radius) {
+				resetPlayer();
+			} else {
+				this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
+				this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
+				this.player.updatePosition(this.player.getVelocity().scl(delta));
+			}
 			break;
 		default:
 			System.out.println("Error: Invalid state accessed from GameScreen!");
 		}
+	}
+	
+	private void resetPlayer() {
+		this.player.setPosition(LevelManager.getStartPos());
+		this.player.stop();
+		this.state = State.WAITING;
 	}
 
 }

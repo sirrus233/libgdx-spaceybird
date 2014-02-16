@@ -3,14 +3,16 @@ package cf.spaceybird;
 import cf.spaceybird.actors.Obstacle;
 import cf.spaceybird.actors.Player;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class LevelManager {
-    
+
 	private static Player player = new Player(new Vector2());
 	private static Vector2 startPos = new Vector2();
 	private static Array<Obstacle> obstacles = new Array<Obstacle>(false, 16);
+	private static Circle goal = new Circle(0, 0, 0.3f);
 	private static int currentLevel = 1;
 	
 	public static void setLevel(int level) {
@@ -19,15 +21,16 @@ public class LevelManager {
 		case 1:
 			initPlayer(3,3);		
 			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
+			goal.setPosition(10,3);
 			break;
 		case 2:
-			initPlayer(4,4);
-			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
+			initPlayer(6,4);
+			obstacles.add(new Obstacle(new Vector2(8,6), 0.5f));
 			obstacles.add(new Obstacle(new Vector2(2,5), 1.5f));
+			goal.setPosition(10,3);
 			break;	
 		default:
-			initPlayer(3,3);		
-			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
+			System.out.println("Error: Invalid level accessed from LevelManager!");
 		}
 	}
 	
@@ -46,11 +49,15 @@ public class LevelManager {
 		return obstacles;
 	}
 	
-	public static int getCurrentLevel() {
-		return currentLevel;
+	public static void nextLevel() {
+		setLevel(++currentLevel);
 	}
 	
 	public static Vector2 getStartPos() {
 		return new Vector2(startPos);
+	}
+	
+	public static Circle getGoal() {
+		return goal;
 	}
 }
