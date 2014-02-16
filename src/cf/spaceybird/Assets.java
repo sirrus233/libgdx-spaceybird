@@ -1,6 +1,7 @@
 package cf.spaceybird;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -13,7 +14,9 @@ public class Assets {
 	public static TextureRegion planetSmall;
 	public static TextureRegion satellite;
 	public static TextureRegion asteroid;
-
+	
+	public static Music music;
+	
 	public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
 	}
@@ -27,5 +30,10 @@ public class Assets {
 		planetSmall = new TextureRegion(gameTextures, 420, 1300, 320, 310);
 		satellite = new TextureRegion(gameTextures, 660, 110, 190, 380);
 		asteroid = new TextureRegion(gameTextures, 2220, 1350, 170, 190);
+		
+		music = Gdx.audio.newMusic(Gdx.files.internal("spaceybird.mp3"));
+		music.setLooping(true);
+		music.setVolume(0.5f);
+		music.play();
 	}
 }
