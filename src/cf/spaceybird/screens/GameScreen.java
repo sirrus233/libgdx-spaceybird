@@ -17,6 +17,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends ScreenTemplate {
+	private final float LAUNCH_FORCE_SCALE = 5;
+	
 	private enum State {
 		WAITING, AIMING, LAUNCHED
 	}
@@ -107,8 +109,8 @@ public class GameScreen extends ScreenTemplate {
 				this.player.setPosition(newPosition);
 			}
 			if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-				Vector2 launchDirection = new Vector2(LevelManager.getStartPos()).sub(this.player.getPosition());
-				this.player.setVelocity(launchDirection.scl(5));
+				Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(this.player.getPosition());
+				this.player.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
 				this.state = State.LAUNCHED;
 			}
 			break;
