@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class ScreenTemplate implements Screen {
-	final boolean DEBUG = false;
+	final boolean DEBUG = true;
 	
 	static OrthographicCamera cam;
 	static SpriteBatch batch;
@@ -47,8 +47,8 @@ public abstract class ScreenTemplate implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
+		ppuX = Gdx.graphics.getWidth()/aspectX;
+		ppuY = Gdx.graphics.getHeight()/aspectY;	
 	}
 
 	@Override
