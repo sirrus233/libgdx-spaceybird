@@ -17,7 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class GameScreen extends ScreenTemplate {
-	private final float LAUNCH_FORCE_SCALE = 5;
+	private final float LAUNCH_FORCE_SCALE = 8;
 	
 	private enum State {
 		WAITING, AIMING, LAUNCHED
