@@ -20,7 +20,7 @@ public class GameScreen extends ScreenTemplate {
 	private final float LAUNCH_FORCE_SCALE = 8;
 	
 	private enum State {
-		WAITING, AIMING, LAUNCHED
+		WAITING, AIMING, LAUNCHED, VICTORY
 	}
 	
 	private Game game;
@@ -128,8 +128,7 @@ public class GameScreen extends ScreenTemplate {
 			if (hitObstacle) {
 				resetPlayer();
 			} else if (this.goal.overlaps(this.player.getBounds())) {
-				LevelManager.nextLevel();
-				resetPlayer();
+				this.state = State.VICTORY;
 			} else if (this.player.getBounds().x > unitsX + this.player.getBounds().radius ||
 					this.player.getBounds().x < -this.player.getBounds().radius ||
 					this.player.getBounds().y > unitsY + this.player.getBounds().radius ||
@@ -141,6 +140,10 @@ public class GameScreen extends ScreenTemplate {
 				this.player.updatePosition(this.player.getVelocity().scl(delta));
 			}
 			break;
+		case VICTORY:
+			
+			LevelManager.nextLevel();
+			resetPlayer();
 		default:
 			System.out.println("Error: Invalid state accessed from GameScreen!");
 		}
