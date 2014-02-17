@@ -55,7 +55,7 @@ public class GameScreen extends ScreenTemplate {
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
 		batch.disableBlending();
-		batch.draw(Assets.background, 0, 0, aspectX, aspectY);
+		batch.draw(Assets.background, 0, 0, unitsX, unitsY);
 		batch.enableBlending();
 		batch.draw(Assets.spaceyBird, this.player.getBounds().x - this.player.getBounds().radius, 
 				this.player.getBounds().y - this.player.getBounds().radius, 
@@ -130,9 +130,9 @@ public class GameScreen extends ScreenTemplate {
 			} else if (this.goal.overlaps(this.player.getBounds())) {
 				LevelManager.nextLevel();
 				resetPlayer();
-			} else if (this.player.getBounds().x > aspectX + this.player.getBounds().radius ||
+			} else if (this.player.getBounds().x > unitsX + this.player.getBounds().radius ||
 					this.player.getBounds().x < -this.player.getBounds().radius ||
-					this.player.getBounds().y > aspectY + this.player.getBounds().radius ||
+					this.player.getBounds().y > unitsY + this.player.getBounds().radius ||
 					this.player.getBounds().y < -this.player.getBounds().radius) {
 				resetPlayer();
 			} else {

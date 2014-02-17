@@ -13,22 +13,22 @@ public abstract class ScreenTemplate implements Screen {
 	static SpriteBatch batch;
 	static ShapeRenderer debugRenderer;
 	
-	static float aspectX;
-	static float aspectY;
+	static float unitsX;
+	static float unitsY;
 	static float ppuX; //pixels per unit on the X axis
 	static float ppuY; //pixels per unit on the Y axis
 	
 	public static void init() {
-		aspectX = 16;
-		aspectY = 9;
+		unitsX = 16;
+		unitsY = 9;
 		
-		ppuX = Gdx.graphics.getWidth()/aspectX;
-		ppuY = Gdx.graphics.getHeight()/aspectY;
+		ppuX = Gdx.graphics.getWidth()/unitsX;
+		ppuY = Gdx.graphics.getHeight()/unitsY;
 		
 		//A new OrthographicCamera is created, with relative aspect ratio defined in its parameters
 		//The camera view is then shifted to point at only the first quadrant of the graph
-		cam = new OrthographicCamera(aspectX, aspectY);
-    	cam.position.set(aspectX/2, aspectY/2, 0);
+		cam = new OrthographicCamera(unitsX, unitsY);
+    	cam.position.set(unitsX/2, unitsY/2, 0);
     	cam.update();
     	
     	batch = new SpriteBatch();
@@ -47,8 +47,8 @@ public abstract class ScreenTemplate implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		ppuX = Gdx.graphics.getWidth()/aspectX;
-		ppuY = Gdx.graphics.getHeight()/aspectY;	
+		ppuX = Gdx.graphics.getWidth()/unitsX;
+		ppuY = Gdx.graphics.getHeight()/unitsY;	
 	}
 
 	@Override
