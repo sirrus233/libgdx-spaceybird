@@ -148,7 +148,6 @@ public class GameScreen extends ScreenTemplate {
 	
 	private void resetPlayer() {
 		this.player.setPosition(LevelManager.getStartPos());
-		this.player.stop();
 		this.state = State.WAITING;
 	}
 

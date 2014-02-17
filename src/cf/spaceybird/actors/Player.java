@@ -76,8 +76,4 @@ public class Player {
 	public void updatePosition(Vector2 deltaP) {
 		this.updatePosition(deltaP.x, deltaP.y);
 	}
-	
-	public void stop() {
-		this.velocity.set(0,0);
-	}
 }
