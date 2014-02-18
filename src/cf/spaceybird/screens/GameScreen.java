@@ -32,6 +32,7 @@ public class GameScreen extends ScreenTemplate {
 	private Vector2 mouseDelta;
 	private Vector2 mouseNorm;
 	private Vector2 mouseDeltaNorm;
+	private int score;
 	
 	public GameScreen(Game g) {
 		// TODO Auto-generated constructor stub
@@ -76,6 +77,7 @@ public class GameScreen extends ScreenTemplate {
 		batch.draw(Assets.satellite, this.goal.x - this.goal.radius, this.goal.y - this.goal.radius, 
 				2*this.goal.radius, 2*this.goal.radius);
 		batch.end();
+		
 		if (DEBUG) {
 			debugRenderer.setProjectionMatrix(cam.combined);
 	        debugRenderer.begin(ShapeType.Line);
@@ -100,6 +102,7 @@ public class GameScreen extends ScreenTemplate {
 				this.state = State.AIMING;
 			}
 			break;
+			
 		case AIMING:
 			if (mouseNorm.dst(LevelManager.getStartPos()) < 2) {
 				this.player.updatePosition(this.mouseDeltaNorm);
@@ -114,6 +117,7 @@ public class GameScreen extends ScreenTemplate {
 				this.state = State.LAUNCHED;
 			}
 			break;
+			
 		case LAUNCHED:
 			Vector2 gravForce = new Vector2();
 			boolean hitObstacle = false;
@@ -135,11 +139,14 @@ public class GameScreen extends ScreenTemplate {
 					this.player.getBounds().y < -this.player.getBounds().radius) {
 				resetPlayer();
 			} else {
+				Vector2 oldPosition = this.player.getPosition();
 				this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
 				this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
 				this.player.updatePosition(this.player.getVelocity().scl(delta));
+				score += this.player.getPosition().sub(oldPosition).len() *100;
 			}
 			break;
+			
 		case VICTORY:
 			
 			LevelManager.nextLevel();
@@ -150,6 +157,7 @@ public class GameScreen extends ScreenTemplate {
 	}
 	
 	private void resetPlayer() {
+		score = 0;
 		this.player.setPosition(LevelManager.getStartPos());
 		this.state = State.WAITING;
 	}
