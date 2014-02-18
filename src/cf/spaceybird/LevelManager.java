@@ -1,5 +1,8 @@
 package cf.spaceybird;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cf.spaceybird.actors.Obstacle;
 import cf.spaceybird.actors.Player;
 
@@ -14,6 +17,7 @@ public class LevelManager {
 	private static Array<Obstacle> obstacles = new Array<Obstacle>(false, 16);
 	private static Circle goal = new Circle(0, 0, 0.3f);
 	private static int currentLevel = 1;
+	public static Map<Integer, Integer> scores = new HashMap<Integer, Integer>();
 	
 	public static void setLevel(int level) {
 		obstacles.clear();
@@ -59,5 +63,14 @@ public class LevelManager {
 	
 	public static Circle getGoal() {
 		return goal;
+	}
+	
+	public static void loadScores(){
+		//TODO Loads in scores from gamesave file.
+	}
+	
+	public static void setScore(int score){
+		scores.put(currentLevel, score);
+		//TODO Write score to gamesave file.
 	}
 }
