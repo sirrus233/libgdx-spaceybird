@@ -45,6 +45,7 @@ public class GameScreen extends ScreenTemplate {
 		this.mouseDelta = new Vector2();
 		this.mouseNorm = new Vector2();
 		this.mouseDeltaNorm = new Vector2();
+		this.score = 0;
 		
 		LevelManager.setLevel(1);
 	}
@@ -143,21 +144,22 @@ public class GameScreen extends ScreenTemplate {
 				this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
 				this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
 				this.player.updatePosition(this.player.getVelocity().scl(delta));
-				score += this.player.getPosition().sub(oldPosition).len() *100;
+				this.score += this.player.getPosition().sub(oldPosition).len() *100;
 			}
 			break;
 			
-		case VICTORY:
-			
+		case VICTORY:			
 			LevelManager.nextLevel();
 			resetPlayer();
+			break;
+			
 		default:
 			System.out.println("Error: Invalid state accessed from GameScreen!");
 		}
 	}
 	
 	private void resetPlayer() {
-		score = 0;
+		this.score = 0;
 		this.player.setPosition(LevelManager.getStartPos());
 		this.state = State.WAITING;
 	}
