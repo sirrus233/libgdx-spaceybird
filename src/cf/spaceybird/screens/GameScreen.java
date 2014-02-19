@@ -54,33 +54,39 @@ public class GameScreen extends ScreenTemplate {
 	public void draw() {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		batch.setProjectionMatrix(cam.combined);
-		batch.begin();
-		batch.disableBlending();
-		batch.draw(Assets.background, 0, 0, unitsX, unitsY);
-		batch.enableBlending();
-		batch.draw(Assets.spaceyBird, this.player.getBounds().x - this.player.getBounds().radius, 
+		
+		gameBatch.setProjectionMatrix(gameCam.combined);
+		gameBatch.begin();
+		gameBatch.disableBlending();
+		gameBatch.draw(Assets.background, 0, 0, unitsX, unitsY);
+		gameBatch.enableBlending();
+		gameBatch.draw(Assets.spaceyBird, this.player.getBounds().x - this.player.getBounds().radius, 
 				this.player.getBounds().y - this.player.getBounds().radius, 
 				2*this.player.getBounds().radius, 2*this.player.getBounds().radius);
 		for (Obstacle o : this.obstacles) {
 			if (o.getBounds().radius >= 1.5) {
-				batch.draw(Assets.planetLarge, o.getBounds().x - o.getBounds().radius, 
+				gameBatch.draw(Assets.planetLarge, o.getBounds().x - o.getBounds().radius, 
 						o.getBounds().y - o.getBounds().radius, 2*o.getBounds().radius, 2*o.getBounds().radius);	
 		
 			} else if (o.getBounds().radius >= 1.0) {
-				batch.draw(Assets.planetMedium, o.getBounds().x - o.getBounds().radius, 
+				gameBatch.draw(Assets.planetMedium, o.getBounds().x - o.getBounds().radius, 
 						o.getBounds().y - o.getBounds().radius, 2*o.getBounds().radius, 2*o.getBounds().radius);
 			} else {
-				batch.draw(Assets.planetSmall, o.getBounds().x - o.getBounds().radius, 
+				gameBatch.draw(Assets.planetSmall, o.getBounds().x - o.getBounds().radius, 
 						o.getBounds().y - o.getBounds().radius, 2*o.getBounds().radius, 2*o.getBounds().radius);				
 			}
 		}
-		batch.draw(Assets.satellite, this.goal.x - this.goal.radius, this.goal.y - this.goal.radius, 
+		gameBatch.draw(Assets.satellite, this.goal.x - this.goal.radius, this.goal.y - this.goal.radius, 
 				2*this.goal.radius, 2*this.goal.radius);
-		batch.end();
+		gameBatch.end();
+		
+		fontBatch.setProjectionMatrix(fontCam.combined);
+		fontBatch.begin();
+		Assets.font.draw(fontBatch, "Score:"+this.score, Gdx.graphics.getWidth()-ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
+		fontBatch.end();
 		
 		if (DEBUG) {
-			debugRenderer.setProjectionMatrix(cam.combined);
+			debugRenderer.setProjectionMatrix(gameCam.combined);
 	        debugRenderer.begin(ShapeType.Line);
 	        debugRenderer.setColor(new Color(1, 0, 0, 1));
 	        debugRenderer.circle(this.player.getBounds().x, this.player.getBounds().y, this.player.getBounds().radius, 1200);

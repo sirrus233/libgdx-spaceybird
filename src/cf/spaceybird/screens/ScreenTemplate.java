@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public abstract class ScreenTemplate implements Screen {
 	final boolean DEBUG = true;
 	
-	static OrthographicCamera cam;
-	static SpriteBatch batch;
+	static OrthographicCamera gameCam;
+	static OrthographicCamera fontCam;
+	static SpriteBatch gameBatch;
+	static SpriteBatch fontBatch;
 	static ShapeRenderer debugRenderer;
 	
 	static float unitsX;
@@ -27,11 +29,16 @@ public abstract class ScreenTemplate implements Screen {
 		
 		//A new OrthographicCamera is created, with relative aspect ratio defined in its parameters
 		//The camera view is then shifted to point at only the first quadrant of the graph
-		cam = new OrthographicCamera(unitsX, unitsY);
-    	cam.position.set(unitsX/2, unitsY/2, 0);
-    	cam.update();
+		gameCam = new OrthographicCamera(unitsX, unitsY);
+    	gameCam.position.set(unitsX/2, unitsY/2, 0);
+    	gameCam.update();
     	
-    	batch = new SpriteBatch();
+    	fontCam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    	fontCam.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+    	fontCam.update();
+    	
+    	gameBatch = new SpriteBatch();
+    	fontBatch = new SpriteBatch();
     	debugRenderer = new ShapeRenderer();
 	}
 	
@@ -49,6 +56,10 @@ public abstract class ScreenTemplate implements Screen {
 	public void resize(int width, int height) {
 		ppuX = Gdx.graphics.getWidth()/unitsX;
 		ppuY = Gdx.graphics.getHeight()/unitsY;	
+		
+		fontCam.setToOrtho(false, (float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
+		fontCam.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+    	fontCam.update();
 	}
 
 	@Override
