@@ -82,7 +82,7 @@ public class GameScreen extends ScreenTemplate {
 		
 		fontBatch.setProjectionMatrix(fontCam.combined);
 		fontBatch.begin();
-		Assets.font.draw(fontBatch, "Score:"+this.score, Gdx.graphics.getWidth()-ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
+		Assets.font.draw(fontBatch, "Score:"+this.score, Gdx.graphics.getWidth()-3*ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
 		fontBatch.end();
 		
 		if (DEBUG) {

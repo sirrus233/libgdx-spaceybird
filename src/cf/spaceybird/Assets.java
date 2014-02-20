@@ -34,7 +34,7 @@ public class Assets {
 		satellite = new TextureRegion(gameTextures, 660, 110, 190, 380);
 		asteroid = new TextureRegion(gameTextures, 2220, 1350, 170, 190);
 		
-		font = new BitmapFont();
+		font = new BitmapFont(Gdx.files.internal("cartoon_font.fnt"));
 		
 		music = Gdx.audio.newMusic(Gdx.files.internal("spaceybird.mp3"));
 		music.setLooping(true);
