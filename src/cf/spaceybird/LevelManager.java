@@ -20,6 +20,7 @@ public class LevelManager {
 	public static Map<Integer, Integer> scores = new HashMap<Integer, Integer>();
 	
 	public static void setLevel(int level) {
+		currentLevel = level;
 		obstacles.clear();
 		switch(level) {
 		case 1:

@@ -35,7 +35,6 @@ public class GameScreen extends ScreenTemplate {
 	private int score;
 	
 	public GameScreen(Game g) {
-		// TODO Auto-generated constructor stub
 		this.game = g;
 		this.state = State.WAITING;
 		this.player = LevelManager.getPlayer();
