@@ -96,6 +96,7 @@ public class GameScreen extends ScreenTemplate {
 		}
 	}
 
+	@Override
 	public void update(float delta) {
 		this.mouse.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 		this.mouseDelta.set(Gdx.input.getDeltaX(), -Gdx.input.getDeltaY());

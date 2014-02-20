@@ -40,15 +40,15 @@ public abstract class ScreenTemplate implements Screen {
     	debugRenderer = new ShapeRenderer();
 	}
 	
+	public abstract void draw();
+	
+	public abstract void update(float delta);
+	
 	@Override
 	public void render(float delta) {
 		update(delta);
 		draw();
 	}
-	
-	public abstract void draw();
-	
-	public abstract void update(float delta);
 
 	@Override
 	public void resize(int width, int height) {
