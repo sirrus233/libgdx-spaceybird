@@ -11,8 +11,7 @@ public abstract class ScreenTemplate implements Screen {
 	
 	static OrthographicCamera gameCam;
 	static OrthographicCamera fontCam;
-	static SpriteBatch gameBatch;
-	static SpriteBatch fontBatch;
+	static SpriteBatch batch;
 	static ShapeRenderer debugRenderer;
 	
 	static float unitsX;
@@ -37,8 +36,7 @@ public abstract class ScreenTemplate implements Screen {
     	fontCam.position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
     	fontCam.update();
     	
-    	gameBatch = new SpriteBatch();
-    	fontBatch = new SpriteBatch();
+    	batch = new SpriteBatch();
     	debugRenderer = new ShapeRenderer();
 	}
 	

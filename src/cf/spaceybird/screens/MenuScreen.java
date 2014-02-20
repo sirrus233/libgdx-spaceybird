@@ -33,17 +33,17 @@ public class MenuScreen extends ScreenTemplate {
 		Gdx.gl.glClearColor(0.20f, 0.18f, 0.54f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		gameBatch.setProjectionMatrix(gameCam.combined);
-		gameBatch.begin();
+		batch.setProjectionMatrix(gameCam.combined);
+		batch.begin();
 		//TODO button assets go here
-		gameBatch.end();
+		batch.end();
 		
-		fontBatch.setProjectionMatrix(fontCam.combined);
-		fontBatch.begin();
-		Assets.font.draw(fontBatch, "SPACEY BIRD!", 5.8f*ppuX, 8f*ppuY);
-		Assets.font.draw(fontBatch, "START", 7f*ppuX, 4.7f*ppuY);
-		Assets.font.draw(fontBatch, "SOUND", 7f*ppuX, 2.7f*ppuY);
-		fontBatch.end();
+		batch.setProjectionMatrix(fontCam.combined);
+		batch.begin();
+		Assets.font.draw(batch, "SPACEY BIRD!", 5.8f*ppuX, 8f*ppuY);
+		Assets.font.draw(batch, "START", 7f*ppuX, 4.7f*ppuY);
+		Assets.font.draw(batch, "SOUND", 7f*ppuX, 2.7f*ppuY);
+		batch.end();
 		
 		if (DEBUG) {
 			debugRenderer.setProjectionMatrix(gameCam.combined);
