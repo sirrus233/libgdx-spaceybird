@@ -13,10 +13,7 @@ public class Obstacle {
 	
 	//Constructs an obstacle at the specified position vector with the specified mass and radius.
 	public Obstacle(Vector2 position, float radius, float mass) {
-		this.position = position;
-		this.bounds.x = position.x;
-		this.bounds.y = position.y;
-		this.bounds.radius = radius;
+		this(position, radius);
 		this.mass = mass;
 	}
 	

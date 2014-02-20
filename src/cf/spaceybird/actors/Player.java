@@ -17,8 +17,7 @@ public class Player {
 	//Constructor for a new player object at the input position vector, with the specified mass.
 	//Initial velocityand acceleration are both 0. Mass is left default.
 	public Player(Vector2 position, float mass) {
-		this.position = position;
-		this.bounds.radius = SIZE;
+		this(position);
 		this.mass = mass;
 	}
 	
