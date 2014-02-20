@@ -1,7 +1,8 @@
 package cf.spaceybird;
 
 import com.badlogic.gdx.Game;
-import cf.spaceybird.screens.GameScreen;
+
+import cf.spaceybird.screens.MenuScreen;
 
 public class SpaceyBird extends Game {
 
@@ -13,6 +14,6 @@ public class SpaceyBird extends Game {
 	public void create() {
 		Setup.init();
 		Assets.load();
-		setScreen(new GameScreen(this));
+		setScreen(new MenuScreen(this));
 	}
 }
