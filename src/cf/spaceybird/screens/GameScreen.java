@@ -103,6 +103,10 @@ public class GameScreen extends ScreenTemplate {
 		this.mouseNorm.set(new Vector2(mouse).div(ppuX,ppuY));
 		this.mouseDeltaNorm.set(new Vector2(mouseDelta).div(ppuX,ppuY));
 		
+		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+			this.game.setScreen(new MenuScreen(this.game));
+		}
+		
 		switch(state) {
 		case WAITING:
 			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(this.mouseNorm)) {
