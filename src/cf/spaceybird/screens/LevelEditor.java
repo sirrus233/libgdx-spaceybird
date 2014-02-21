@@ -26,7 +26,7 @@ private final int PATH_LENGTH = 1024*2;
 private final int MAX_PATHS = 10;
 	
 	private enum State {
-		WAITING, AIMING, LAUNCHED, VICTORY, PLACING_OBSTACLE, PLACING_PLAYER
+		WAITING, AIMING, LAUNCHED, VICTORY, PLACING_OBSTACLE, PLACING_PLAYER, PLACED
 	}
 	
 	private Game game;
@@ -152,6 +152,8 @@ private final int MAX_PATHS = 10;
 		this.mouseNorm.set(new Vector2(mouse).div(ppuX,ppuY));
 		this.mouseDeltaNorm.set(new Vector2(mouseDelta).div(ppuX,ppuY));
 		
+		System.out.println(state);
+		
 		switch(state) {
 		case WAITING:
 			oldPosition = player.getPosition();
@@ -224,7 +226,13 @@ private final int MAX_PATHS = 10;
 			player.setPosition(this.mouseNorm);
 			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
 				LevelManager.setStartPos(this.mouseNorm);
-				this.state = State.VICTORY;
+				this.state = State.PLACED;
+			}
+			break;
+			
+		case PLACED:			
+			if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)){				
+				this.state = State.WAITING;
 			}
 			break;
 			
