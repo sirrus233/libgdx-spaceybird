@@ -34,6 +34,7 @@ public class Obstacle {
 		return this.mass;
 	}
 	
+	//Get the current position vector of the obstacle
 	public Vector2 getPosition() {
 		return new Vector2(this.position);
 	}
