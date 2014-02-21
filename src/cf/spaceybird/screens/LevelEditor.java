@@ -1,6 +1,7 @@
 package cf.spaceybird.screens;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import cf.spaceybird.Assets;
 import cf.spaceybird.LevelManager;
@@ -21,11 +22,11 @@ import com.badlogic.gdx.utils.Array;
 
 public class LevelEditor extends ScreenTemplate {
 private final float LAUNCH_FORCE_SCALE = 8;
-private final int PATH_LENGTH = 1024;
+private final int PATH_LENGTH = 1024*2;
 private final int MAX_PATHS = 10;
 	
 	private enum State {
-		WAITING, AIMING, LAUNCHED, VICTORY, PLACING
+		WAITING, AIMING, LAUNCHED, VICTORY, PLACING_OBSTACLE, PLACING_PLAYER
 	}
 	
 	private Game game;
@@ -39,7 +40,7 @@ private final int MAX_PATHS = 10;
 	private Vector2 mouseDeltaNorm;
 	private Vector2 oldPosition;
 	ArrayList<Vector2> pathTrace;
-	ArrayList<ArrayList<Vector2>> pathHistory;
+	ArrayList<ArrayList<Vector2>> pathHistory;	
 	
 	private int score;
 	
@@ -56,9 +57,10 @@ private final int MAX_PATHS = 10;
 		this.mouseDeltaNorm = new Vector2();
 		this.score = 0;
 		this.oldPosition = new Vector2(); //PT
+		
 		pathTrace = new ArrayList<Vector2>(PATH_LENGTH); //PT
 		pathHistory = new ArrayList<ArrayList<Vector2>>(MAX_PATHS);
-		pathHistory.add(pathTrace);
+		pathHistory.add(pathTrace);		
 		
 		LevelManager.setLevel(0);
 	}
@@ -106,14 +108,41 @@ private final int MAX_PATHS = 10;
 	        for (Obstacle o : this.obstacles) {
 	        	debugRenderer.circle(o.getBounds().x, o.getBounds().y, o.getBounds().radius, 1200);
 	        }
-	        
+	       
+	        debugRenderer.setColor(0, 0.7f, 0.3f, 1);
 	        for (ArrayList<Vector2> path : this.pathHistory){	        	
 	        	for (int i = 1; i < path.size(); i++) {
 	        		debugRenderer.line(path.get(i-1), path.get(i));
 	        	}   
-	        }	        
-	        
+	        }
 	        debugRenderer.end();
+		}
+		
+		switch(state)
+		{
+		
+		case PLACING_OBSTACLE:
+			fontBatch.setProjectionMatrix(fontCam.combined);
+			fontBatch.begin();
+			Assets.font.draw(fontBatch, "Placing Obstacle", Gdx.graphics.getWidth()-15*ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
+			fontBatch.end();
+			break;
+			
+		case PLACING_PLAYER:
+			fontBatch.setProjectionMatrix(fontCam.combined);
+			fontBatch.begin();
+			Assets.font.draw(fontBatch, "Placing Player", Gdx.graphics.getWidth()-15*ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
+			fontBatch.end();
+			break;
+		
+		default:
+			fontBatch.setProjectionMatrix(fontCam.combined);
+			fontBatch.begin();
+			Assets.font.draw(fontBatch, "Press P or O", Gdx.graphics.getWidth()-15*ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
+			fontBatch.end();
+			break;
+			
+			
 		}
 	}
 
@@ -125,14 +154,16 @@ private final int MAX_PATHS = 10;
 		
 		switch(state) {
 		case WAITING:
-			System.out.println(obstacles.size);
 			oldPosition = player.getPosition();
 			
 			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(this.mouseNorm)) {
 				this.state = State.AIMING;
 			}
+			else if (Gdx.input.isKeyPressed(Input.Keys.O)) {
+				this.state = State.PLACING_OBSTACLE;
+			} 
 			else if (Gdx.input.isKeyPressed(Input.Keys.P)) {
-				this.state = State.PLACING;
+				this.state = State.PLACING_PLAYER;
 			}
 			break;
 			
@@ -189,7 +220,15 @@ private final int MAX_PATHS = 10;
 			resetPlayer();
 			break;
 			
-		case PLACING:
+		case PLACING_PLAYER:
+			player.setPosition(this.mouseNorm);
+			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+				LevelManager.setStartPos(this.mouseNorm);
+				this.state = State.VICTORY;
+			}
+			break;
+			
+		case PLACING_OBSTACLE:
 			
 			 if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {				
 				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 0.5f, 1));
@@ -245,8 +284,7 @@ private final int MAX_PATHS = 10;
 	private void newPathTrace() { //PT
 		if (pathHistory.size() >= MAX_PATHS ){
 			pathHistory.remove(1);	
-		}		
-		pathHistory.add(pathTrace);		
+		}			
 		pathTrace = new ArrayList<Vector2>(PATH_LENGTH);
 		pathHistory.add(pathTrace);
 	}
