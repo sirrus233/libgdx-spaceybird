@@ -40,7 +40,8 @@ private final int MAX_PATHS = 10;
 	private Vector2 mouseDeltaNorm;
 	private Vector2 oldPosition;
 	ArrayList<Vector2> pathTrace;
-	ArrayList<ArrayList<Vector2>> pathHistory;	
+	float[][][] pathColor;
+	ArrayList<ArrayList<Vector2>> pathHistory;
 	
 	private int score;
 	
@@ -58,9 +59,10 @@ private final int MAX_PATHS = 10;
 		this.score = 0;
 		this.oldPosition = new Vector2(); //PT
 		
-		pathTrace = new ArrayList<Vector2>(PATH_LENGTH); //PT
+		newPathTrace(); //PT
 		pathHistory = new ArrayList<ArrayList<Vector2>>(MAX_PATHS);
 		pathHistory.add(pathTrace);		
+		pathColor = new float[MAX_PATHS][MAX_PATHS][MAX_PATHS];
 		
 		LevelManager.setLevel(0);
 	}
@@ -152,7 +154,6 @@ private final int MAX_PATHS = 10;
 		this.mouseNorm.set(new Vector2(mouse).div(ppuX,ppuY));
 		this.mouseDeltaNorm.set(new Vector2(mouseDelta).div(ppuX,ppuY));
 		
-		System.out.println(state);
 		
 		switch(state) {
 		case WAITING:
@@ -292,7 +293,9 @@ private final int MAX_PATHS = 10;
 	private void newPathTrace() { //PT
 		if (pathHistory.size() >= MAX_PATHS ){
 			pathHistory.remove(1);	
-		}			
+		}
+		Random rn = new Random();
+		
 		pathTrace = new ArrayList<Vector2>(PATH_LENGTH);
 		pathHistory.add(pathTrace);
 	}
