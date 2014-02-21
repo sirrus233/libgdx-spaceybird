@@ -25,9 +25,9 @@ public class MenuScreen extends ScreenTemplate {
 		this.mouseClicked = false;
 		this.mouse = new Vector2();
 		this.mouseNorm = new Vector2();
-		this.startButton = new Rectangle(4,4,8,1);
-		this.soundButton = new Rectangle(4,2,8,1);
-		this.levEdButton = new Rectangle(14,2,3,1);	
+		this.startButton = new Rectangle(4,6,8,1);
+		this.soundButton = new Rectangle(4,4,8,1);
+		this.levEdButton = new Rectangle(4,2,8,1);	
 	}
 	
 	@Override
@@ -43,9 +43,9 @@ public class MenuScreen extends ScreenTemplate {
 		fontBatch.setProjectionMatrix(fontCam.combined);
 		fontBatch.begin();
 		Assets.font.draw(fontBatch, "SPACEY BIRD!", 5.8f*ppuX, 8f*ppuY);
-		Assets.font.draw(fontBatch, "START", 7f*ppuX, 4.7f*ppuY);
-		Assets.font.draw(fontBatch, "SOUND", 7f*ppuX, 2.7f*ppuY);
-		Assets.font.draw(fontBatch, "LevEd", 14f*ppuX, 2.7f*ppuY);
+		Assets.font.draw(fontBatch, "START", 7f*ppuX, 6.7f*ppuY);
+		Assets.font.draw(fontBatch, "SOUND", 7f*ppuX, 4.7f*ppuY);
+		Assets.font.draw(fontBatch, "LevEd", 7f*ppuX, 2.7f*ppuY);
 		fontBatch.end();
 		
 		if (DEBUG) {
@@ -54,6 +54,7 @@ public class MenuScreen extends ScreenTemplate {
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
 			debugRenderer.rect(this.startButton.x, this.startButton.y, this.startButton.width, this.startButton.height);
 			debugRenderer.rect(this.soundButton.x, this.soundButton.y, this.soundButton.width, this.soundButton.height);
+			debugRenderer.rect(this.levEdButton.x, this.levEdButton.y, this.levEdButton.width, this.levEdButton.height);
 			debugRenderer.end();
 		}
 	}
