@@ -15,6 +15,7 @@ public class MenuScreen extends ScreenTemplate {
 	private Game game;
 	private Rectangle startButton;
 	private Rectangle soundButton;
+	private Rectangle levEdButton;
 	private Vector2 mouse;
 	private Vector2 mouseNorm;
 	private boolean mouseClicked;
@@ -25,7 +26,8 @@ public class MenuScreen extends ScreenTemplate {
 		this.mouse = new Vector2();
 		this.mouseNorm = new Vector2();
 		this.startButton = new Rectangle(4,4,8,1);
-		this.soundButton = new Rectangle(4,2,8,1);	
+		this.soundButton = new Rectangle(4,2,8,1);
+		this.levEdButton = new Rectangle(14,2,3,1);	
 	}
 	
 	@Override
@@ -43,6 +45,7 @@ public class MenuScreen extends ScreenTemplate {
 		Assets.font.draw(fontBatch, "SPACEY BIRD!", 5.8f*ppuX, 8f*ppuY);
 		Assets.font.draw(fontBatch, "START", 7f*ppuX, 4.7f*ppuY);
 		Assets.font.draw(fontBatch, "SOUND", 7f*ppuX, 2.7f*ppuY);
+		Assets.font.draw(fontBatch, "LevEd", 14f*ppuX, 2.7f*ppuY);
 		fontBatch.end();
 		
 		if (DEBUG) {
@@ -68,6 +71,10 @@ public class MenuScreen extends ScreenTemplate {
 			this.mouseClicked = false;
 			if (this.startButton.contains(this.mouseNorm)) {
 				this.game.setScreen(new GameScreen(this.game));
+				
+			} else if (this.levEdButton.contains(this.mouseNorm)) {
+					this.game.setScreen(new LevelEditor(this.game));
+					
 			} else if (this.soundButton.contains(this.mouseNorm)) {
 				if (Assets.music.isPlaying()) {
 					Assets.music.stop();
