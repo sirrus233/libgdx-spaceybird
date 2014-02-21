@@ -22,8 +22,13 @@ public class LevelManager {
 	public static void setLevel(int level) {
 		obstacles.clear();
 		switch(level) {
+		case 0:
+			initPlayer(2,2);
+			//obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
+			goal.setPosition(14,8);
+			break;
 		case 1:
-			initPlayer(3,3);		
+			initPlayer(3,3);
 			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
 			goal.setPosition(10,3);
 			break;
