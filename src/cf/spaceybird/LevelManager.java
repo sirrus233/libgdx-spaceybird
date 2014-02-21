@@ -66,6 +66,10 @@ public class LevelManager {
 		return new Vector2(startPos);
 	}
 	
+	public static void setStartPos(Vector2 newPos) {
+		startPos = new Vector2(newPos);
+	}
+	
 	public static Circle getGoal() {
 		return goal;
 	}
