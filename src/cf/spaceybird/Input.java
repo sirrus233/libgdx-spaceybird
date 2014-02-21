@@ -31,7 +31,8 @@ public class Input implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
+		//TODO implement what to do if ESC is pressed
+		//if (character == '\u001B')
 		return false;
 	}
 
