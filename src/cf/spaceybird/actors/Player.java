@@ -33,6 +33,7 @@ public class Player {
 		return bounds;
 	}
 	
+	//Returns the mass of the player
 	public float getMass() {
 		return this.mass;
 	}
