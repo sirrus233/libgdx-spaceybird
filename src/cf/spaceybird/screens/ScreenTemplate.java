@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class ScreenTemplate implements Screen {
-	final boolean DEBUG = false;
+	final boolean DEBUG = true;
 	
 	static OrthographicCamera gameCam;
 	static OrthographicCamera fontCam;
