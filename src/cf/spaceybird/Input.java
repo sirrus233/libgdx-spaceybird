@@ -1,9 +1,22 @@
 package cf.spaceybird;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
 
 public class Input implements InputProcessor {
-
+	
+	private Vector2 mouse = new Vector2();
+	private Vector2 mouseDelta = new Vector2();
+	
+	public Vector2 getMouse() {
+		return new Vector2(this.mouse);
+	}
+	
+	public Vector2 getMouseDelta() {
+		return new Vector2(this.mouseDelta);
+	}
+	
 	@Override
 	public boolean keyDown(int keycode) {
 		// TODO Auto-generated method stub
@@ -42,7 +55,8 @@ public class Input implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
+		this.mouse.set(screenX, Gdx.graphics.getHeight() - screenY);
+		this.mouseDelta.set(Gdx.input.getDeltaX(), -Gdx.input.getDeltaY());
 		return false;
 	}
 
