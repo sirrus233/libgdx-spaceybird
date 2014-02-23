@@ -3,6 +3,7 @@ package cf.spaceybird;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Input.Keys;
 
 public class Input implements InputProcessor {
 	
@@ -30,9 +31,10 @@ public class Input implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyTyped(char character) {
-		//TODO implement what to do if ESC is pressed
-		//if (character == '\u001B')
+	public boolean keyTyped(char character) {		
+		//if (character == '\u001B') 
+		if (character == Keys.ESCAPE) 
+			System.out.println("caught!");
 		return false;
 	}
 
