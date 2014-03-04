@@ -16,10 +16,10 @@ public abstract class ScreenTemplate implements Screen {
 	static SpriteBatch batch;
 	static ShapeRenderer debugRenderer;
 	
-	static float unitsX;
-	static float unitsY;
-	static float ppuX; //pixels per unit on the X axis
-	static float ppuY; //pixels per unit on the Y axis
+	public static float unitsX;
+	public static float unitsY;
+	public static float ppuX; //pixels per unit on the X axis
+	public static float ppuY; //pixels per unit on the Y axis
 	
 	public static void init() {
 		unitsX = 16;
