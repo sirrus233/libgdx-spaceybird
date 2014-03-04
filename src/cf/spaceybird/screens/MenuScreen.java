@@ -50,7 +50,7 @@ public class MenuScreen extends ScreenTemplate {
 
 	@Override
 	public void update(float delta) {
-		if (Input.buttons[Input.LEFT]) {
+		if (Input.buttonsClicked[Input.LEFT]) {
 			if (this.startButton.contains(Input.getMouseNorm())) {
 				this.game.setScreen(new GameScreen(this.game));
 			} else if (this.soundButton.contains(Input.getMouseNorm())) {

@@ -96,7 +96,7 @@ public class GameScreen extends ScreenTemplate {
 		
 		switch(state) {
 		case WAITING:
-			if (Input.buttons[Input.LEFT] && this.player.getBounds().contains(Input.getMouseNorm())) {
+			if (Input.buttonsDown[Input.LEFT] && this.player.getBounds().contains(Input.getMouseNorm())) {
 				this.state = State.AIMING;
 			}
 			break;
@@ -109,7 +109,7 @@ public class GameScreen extends ScreenTemplate {
 				Vector2 newPosition = LevelManager.getStartPos().add(newDirection);
 				this.player.setPosition(newPosition);
 			}
-			if (!Input.buttons[Input.LEFT]) {
+			if (Input.buttonsClicked[Input.LEFT]) {
 				Vector2 launch = LevelManager.getStartPos().sub(this.player.getPosition());
 				this.player.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
 				this.state = State.LAUNCHED;
