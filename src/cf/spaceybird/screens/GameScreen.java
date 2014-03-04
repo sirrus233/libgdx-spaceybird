@@ -1,6 +1,7 @@
 package cf.spaceybird.screens;
 
 import cf.spaceybird.Assets;
+import cf.spaceybird.Input;
 import cf.spaceybird.LevelManager;
 import cf.spaceybird.PhysicsEngine;
 import cf.spaceybird.actors.Obstacle;
@@ -8,7 +9,6 @@ import cf.spaceybird.actors.Player;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -28,10 +28,6 @@ public class GameScreen extends ScreenTemplate {
 	private Array<Obstacle> obstacles;
 	private Circle goal;
 	private State state;
-	private Vector2 mouse;
-	private Vector2 mouseDelta;
-	private Vector2 mouseNorm;
-	private Vector2 mouseDeltaNorm;
 	private int score;
 	
 	public GameScreen(Game g) {
@@ -40,10 +36,6 @@ public class GameScreen extends ScreenTemplate {
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
 		this.goal = LevelManager.getGoal();
-		this.mouse = new Vector2();
-		this.mouseDelta = new Vector2();
-		this.mouseNorm = new Vector2();
-		this.mouseDeltaNorm = new Vector2();
 		this.score = 0;
 		
 		LevelManager.setLevel(1);
@@ -98,32 +90,27 @@ public class GameScreen extends ScreenTemplate {
 
 	@Override
 	public void update(float delta) {
-		this.mouse.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-		this.mouseDelta.set(Gdx.input.getDeltaX(), -Gdx.input.getDeltaY());
-		this.mouseNorm.set(new Vector2(mouse).div(ppuX,ppuY));
-		this.mouseDeltaNorm.set(new Vector2(mouseDelta).div(ppuX,ppuY));
-		
-		if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+		if (Input.keys[Input.ESC]) {
 			this.game.setScreen(new MenuScreen(this.game));
 		}
 		
 		switch(state) {
 		case WAITING:
-			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && this.player.getBounds().contains(this.mouseNorm)) {
+			if (Input.buttonsDown[Input.LEFT] && this.player.getBounds().contains(Input.getMouseNorm())) {
 				this.state = State.AIMING;
 			}
 			break;
 			
 		case AIMING:
-			if (mouseNorm.dst(LevelManager.getStartPos()) < 2) {
-				this.player.updatePosition(this.mouseDeltaNorm);
+			if (Input.getMouseNorm().dst(LevelManager.getStartPos()) < 2) {
+				this.player.updatePosition(Input.getMouseDeltaNorm());
 			} else {
-				Vector2 newDirection = new Vector2(mouseNorm).sub(LevelManager.getStartPos()).nor().scl(2);
-				Vector2 newPosition = new Vector2(LevelManager.getStartPos()).add(newDirection);
+				Vector2 newDirection = Input.getMouseNorm().sub(LevelManager.getStartPos()).nor().scl(2);
+				Vector2 newPosition = LevelManager.getStartPos().add(newDirection);
 				this.player.setPosition(newPosition);
 			}
-			if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-				Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(this.player.getPosition());
+			if (Input.buttonsClicked[Input.LEFT]) {
+				Vector2 launch = LevelManager.getStartPos().sub(this.player.getPosition());
 				this.player.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
 				this.state = State.LAUNCHED;
 			}

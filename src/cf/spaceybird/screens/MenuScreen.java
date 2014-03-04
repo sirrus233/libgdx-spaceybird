@@ -1,29 +1,22 @@
 package cf.spaceybird.screens;
 
 import cf.spaceybird.Assets;
+import cf.spaceybird.Input;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public class MenuScreen extends ScreenTemplate {
 	private Game game;
 	private Rectangle startButton;
 	private Rectangle soundButton;
-	private Vector2 mouse;
-	private Vector2 mouseNorm;
-	private boolean mouseClicked;
 	
 	public MenuScreen(Game g) {
 		this.game = g;
-		this.mouseClicked = false;
-		this.mouse = new Vector2();
-		this.mouseNorm = new Vector2();
 		this.startButton = new Rectangle(4,4,8,1);
 		this.soundButton = new Rectangle(4,2,8,1);	
 	}
@@ -57,18 +50,10 @@ public class MenuScreen extends ScreenTemplate {
 
 	@Override
 	public void update(float delta) {
-		this.mouse.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-		this.mouseNorm.set(new Vector2(mouse).div(ppuX,ppuY));
-		
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			this.mouseClicked = true;
-		}
-		
-		if (mouseClicked && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			this.mouseClicked = false;
-			if (this.startButton.contains(this.mouseNorm)) {
+		if (Input.buttonsClicked[Input.LEFT]) {
+			if (this.startButton.contains(Input.getMouseNorm())) {
 				this.game.setScreen(new GameScreen(this.game));
-			} else if (this.soundButton.contains(this.mouseNorm)) {
+			} else if (this.soundButton.contains(Input.getMouseNorm())) {
 				if (Assets.music.isPlaying()) {
 					Assets.music.stop();
 				} else {

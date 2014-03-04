@@ -1,5 +1,7 @@
 package cf.spaceybird.screens;
 
+import cf.spaceybird.Input;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,10 +16,10 @@ public abstract class ScreenTemplate implements Screen {
 	static SpriteBatch batch;
 	static ShapeRenderer debugRenderer;
 	
-	static float unitsX;
-	static float unitsY;
-	static float ppuX; //pixels per unit on the X axis
-	static float ppuY; //pixels per unit on the Y axis
+	public static float unitsX;
+	public static float unitsY;
+	public static float ppuX; //pixels per unit on the X axis
+	public static float ppuY; //pixels per unit on the Y axis
 	
 	public static void init() {
 		unitsX = 16;
@@ -48,6 +50,7 @@ public abstract class ScreenTemplate implements Screen {
 	public void render(float delta) {
 		update(delta);
 		draw();
+		Input.clear();
 	}
 
 	@Override
