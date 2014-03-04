@@ -45,10 +45,6 @@ public class Input implements InputProcessor {
 		for (int i = 0; i < keys.length; i++) {
 			keys[i] = false;
 		}
-		
-		for (int i = 0; i < buttons.length; i++) {
-			buttons[i] = false;
-		}
 	}
 
 	@Override
@@ -65,7 +61,7 @@ public class Input implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+		buttons[button] = false;
 		return false;
 	}
 
@@ -79,8 +75,8 @@ public class Input implements InputProcessor {
 	public boolean mouseMoved(int screenX, int screenY) {
 		mouse.set(screenX, Gdx.graphics.getHeight() - screenY);
 		mouseDelta.set(Gdx.input.getDeltaX(), -Gdx.input.getDeltaY());
-		mouseNorm.set(new Vector2(mouse).div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
-		mouseDeltaNorm.set(new Vector2(mouseDelta).div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
+		mouseNorm.set(getMouse().div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
+		mouseDeltaNorm.set(getMouseDelta().div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
 		return false;
 	}
 
