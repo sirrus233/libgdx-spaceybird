@@ -21,8 +21,10 @@ public class Input implements InputProcessor {
 	private static Vector2 mouseNorm = new Vector2();
 	private static Vector2 mouseDeltaNorm = new Vector2();
 	
-	//Array of keyboard inputs
+	//Array of inputs, available for rest of program to query
 	public static boolean[] keys = new boolean[128];
+	
+	private static boolean[] buttonsDown = new boolean[8];
 	public static boolean[] buttons = new boolean[8];
 	
 	public static Vector2 getMouse() {
@@ -45,6 +47,10 @@ public class Input implements InputProcessor {
 		for (int i = 0; i < keys.length; i++) {
 			keys[i] = false;
 		}
+		
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = false;
+		}
 	}
 
 	@Override
@@ -55,13 +61,18 @@ public class Input implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		buttons[button] = true;
+		buttonsDown[button] = true;
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		buttons[button] = false;
+		//If the mouse button is currently clicked, set it as released, and set the bit in 
+		//the buttons array to show we have registered a click
+		if (buttonsDown[button]) {
+			buttons[button] = true;
+			buttonsDown[button] = false;
+		}
 		return false;
 	}
 
@@ -73,10 +84,15 @@ public class Input implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
+		System.out.println(mouse.toString());
+		//mouseDelta is based on the previous mouse position, so must be calculated before
+		//the mouse vector is changed
+		mouseDelta.set(screenX - getMouse().x, screenY - getMouse().y);
 		mouse.set(screenX, Gdx.graphics.getHeight() - screenY);
-		mouseDelta.set(Gdx.input.getDeltaX(), -Gdx.input.getDeltaY());
-		mouseNorm.set(getMouse().div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
+		
+		//mouse vectors, normalized to work in terms of screen units instead of pixels
 		mouseDeltaNorm.set(getMouseDelta().div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
+		mouseNorm.set(getMouse().div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
 		return false;
 	}
 
