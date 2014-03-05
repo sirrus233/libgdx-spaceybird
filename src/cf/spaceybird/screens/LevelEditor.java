@@ -17,9 +17,6 @@ import cf.spaceybird.LevelManager;
 import cf.spaceybird.PhysicsEngine;
 import cf.spaceybird.actors.Obstacle;
 import cf.spaceybird.actors.Player;
-import cf.spaceybird.actors.PlayerPredict;
-//import cf.spaceybird.screens.GameScreen.State;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -56,7 +53,8 @@ private final int MAX_PATHS = 10;
 	private ArrayList<ArrayList<Vector2>> pathHistory;
 	
 	private ArrayList<Vector2> predictPath;	
-	private PlayerPredict playerPredict;
+	//private PlayerPredict playerPredict;
+	private Player playerPredict;
 	private long predictDelay;
 	
 	private int score;
@@ -376,21 +374,26 @@ private final int MAX_PATHS = 10;
 	
 	//FIXME
 	private void saveLevel() {
-		DateFormat dateFormat = new SimpleDateFormat("MM_dd_yyyy HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("MM_dd_yyyy-HH:mm:ss");
 		Date date = new Date();
 		String myDate = dateFormat.format(date);
 		try {
-			new File("../"+"SpaceyBirdLevel-" + myDate + ".txt");
-		    Writer writer = new BufferedWriter(new OutputStreamWriter(
-		          new FileOutputStream("SpaceyBirdLevel-" + myDate + ".txt")));
+			File f = new File("D:\\Mason\\SBSaves\\SpaceyBirdLevel-" + myDate + ".txt");
+		    boolean created = f.createNewFile();
+		    FileOutputStream os = new FileOutputStream(f);
+		    OutputStreamWriter osw = new OutputStreamWriter(os);
+		    Writer w = new BufferedWriter(osw);
+			//Writer writer = new BufferedWriter(new OutputStreamWriter(
+		     //     new FileOutputStream("SpaceyBirdLevel-" + myDate + ".txt")));
 		    for (Obstacle o : this.obstacles) {
-		    	writer.write(o.getBounds().toString() +"|"+ o.getMass() + "$");				
+		    	w.write(o.getBounds().toString() +"|"+ o.getMass() + "$");				
 			}
-		    writer.write(this.player.getPosition().toString());
-		    writer.flush();writer.close();
+		    w.write(this.player.getPosition().toString());
+		    w.flush();w.close();
 		    System.out.println("Should print");
 		} catch (IOException ex) {
 			System.out.println("PROLEMS");
+			System.out.println(System.getProperty("user.dir") + "\\SpaceyBirdLevel-" + myDate + ".txt");
 			System.out.println(ex.getMessage());
 		}		
 	}

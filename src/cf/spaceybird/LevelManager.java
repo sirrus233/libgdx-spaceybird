@@ -5,8 +5,6 @@ import java.util.Map;
 
 import cf.spaceybird.actors.Obstacle;
 import cf.spaceybird.actors.Player;
-import cf.spaceybird.actors.PlayerPredict;
-
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -14,7 +12,8 @@ import com.badlogic.gdx.utils.Array;
 public class LevelManager {
 
 	private static Player player = new Player(new Vector2());
-	private static PlayerPredict playerPredict = new PlayerPredict(new Vector2());;
+	//private static PlayerPredict playerPredict = new PlayerPredict(new Vector2());
+	private static Player playerPredict = new Player(new Vector2());
 	private static Vector2 startPos = new Vector2();
 	private static Array<Obstacle> obstacles = new Array<Obstacle>(false, 16);
 	private static Circle goal = new Circle(0, 0, 0.3f);
@@ -56,7 +55,7 @@ public class LevelManager {
 	}
 	
 	//Returns the playerPredict object
-		public static PlayerPredict getPlayerPredict() {
+		public static Player getPlayerPredict() {
 			return playerPredict;
 		}
 	

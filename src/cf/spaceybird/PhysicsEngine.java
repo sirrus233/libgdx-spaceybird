@@ -2,7 +2,6 @@ package cf.spaceybird;
 
 import cf.spaceybird.actors.Obstacle;
 import cf.spaceybird.actors.Player;
-import cf.spaceybird.actors.PlayerPredict;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -31,10 +30,7 @@ public class PhysicsEngine {
     public static Vector2 getGravForce(Player p, Obstacle o) {
     	return getGravForce(p.getPosition(), p.getMass(), o.getPosition(), o.getMass());
     }
-    public static Vector2 getGravForce(PlayerPredict p, Obstacle o) {
-    	return getGravForce(p.getPosition(), p.getMass(), o.getPosition(), o.getMass());
-    }
-    
+        
     public static Vector2 getAcceleration(float mass, Vector2 force) {
     	return new Vector2(force).div(mass);
     }
