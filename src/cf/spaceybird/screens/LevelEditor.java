@@ -377,8 +377,10 @@ private final int MAX_PATHS = 10;
 		DateFormat dateFormat = new SimpleDateFormat("MM_dd_yyyy-HH:mm:ss");
 		Date date = new Date();
 		String myDate = dateFormat.format(date);
+		File f = new File("D:\\Mason\\SBSaves\\SpaceyBirdLevel-" + myDate + ".txt");;
+		
 		try {
-			File f = new File("D:\\Mason\\SBSaves\\SpaceyBirdLevel-" + myDate + ".txt");
+			
 		    boolean created = f.createNewFile();
 		    FileOutputStream os = new FileOutputStream(f);
 		    OutputStreamWriter osw = new OutputStreamWriter(os);
@@ -393,7 +395,7 @@ private final int MAX_PATHS = 10;
 		    System.out.println("Should print");
 		} catch (IOException ex) {
 			System.out.println("PROLEMS");
-			System.out.println(System.getProperty("user.dir") + "\\SpaceyBirdLevel-" + myDate + ".txt");
+			System.out.println(f.toString());
 			System.out.println(ex.getMessage());
 		}		
 	}
