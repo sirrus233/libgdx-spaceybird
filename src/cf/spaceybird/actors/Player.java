@@ -74,7 +74,14 @@ public class Player {
 		this.bounds.setPosition(this.position);
 	}
 	
-	public void updatePosition(Vector2 deltaP) {
+	public Vector2 updatePosition(Vector2 deltaP) {
 		this.updatePosition(deltaP.x, deltaP.y);
+		return this.getPosition();
+	}
+	
+	public void ready(Vector2 position){
+		this.position = position;
+		velocity = new Vector2();
+		acceleration = new Vector2();
 	}
 }
