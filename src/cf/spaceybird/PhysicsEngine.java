@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 
 public class PhysicsEngine {
-	/** Scales the total force of gravity */
-    public static final float GRAV_CONST = 80;
+	
+    public static final float GRAV_CONST = 20;
     
     /**Takes input data on two objects, represented as a position vector and mass
      * for each, and calculates the gravitational force between them.

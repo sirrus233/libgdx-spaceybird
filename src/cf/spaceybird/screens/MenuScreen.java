@@ -14,11 +14,14 @@ public class MenuScreen extends ScreenTemplate {
 	private Game game;
 	private Rectangle startButton;
 	private Rectangle soundButton;
+	private Rectangle levEdButton;	
 	
 	public MenuScreen(Game g) {
 		this.game = g;
-		this.startButton = new Rectangle(4,4,8,1);
-		this.soundButton = new Rectangle(4,2,8,1);	
+			
+		this.startButton = new Rectangle(4,6,8,1);
+		this.soundButton = new Rectangle(4,4,8,1);
+		this.levEdButton = new Rectangle(4,2,8,1);
 	}
 	
 	@Override
@@ -29,13 +32,14 @@ public class MenuScreen extends ScreenTemplate {
 		batch.setProjectionMatrix(gameCam.combined);
 		batch.begin();
 		//TODO button assets go here
-		batch.end();
-		
+		batch.end();		
+
 		batch.setProjectionMatrix(fontCam.combined);
 		batch.begin();
 		Assets.font.draw(batch, "SPACEY BIRD!", 5.8f*ppuX, 8f*ppuY);
-		Assets.font.draw(batch, "START", 7f*ppuX, 4.7f*ppuY);
-		Assets.font.draw(batch, "SOUND", 7f*ppuX, 2.7f*ppuY);
+		Assets.font.draw(batch, "START", 7f*ppuX, 6.7f*ppuY);
+		Assets.font.draw(batch, "SOUND", 7f*ppuX, 4.7f*ppuY);
+		Assets.font.draw(batch, "LevEd", 7f*ppuX, 2.7f*ppuY);
 		batch.end();
 		
 		if (DEBUG) {
@@ -44,6 +48,7 @@ public class MenuScreen extends ScreenTemplate {
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
 			debugRenderer.rect(this.startButton.x, this.startButton.y, this.startButton.width, this.startButton.height);
 			debugRenderer.rect(this.soundButton.x, this.soundButton.y, this.soundButton.width, this.soundButton.height);
+			debugRenderer.rect(this.levEdButton.x, this.levEdButton.y, this.levEdButton.width, this.levEdButton.height);
 			debugRenderer.end();
 		}
 	}
@@ -53,6 +58,11 @@ public class MenuScreen extends ScreenTemplate {
 		if (Input.buttonsClicked[Input.LEFT]) {
 			if (this.startButton.contains(Input.getMouseNorm())) {
 				this.game.setScreen(new GameScreen(this.game));
+
+				
+			} else if (this.levEdButton.contains(Input.getMouseNorm())) {
+					this.game.setScreen(new LevelEditor(this.game));
+					
 			} else if (this.soundButton.contains(Input.getMouseNorm())) {
 				if (Assets.music.isPlaying()) {
 					Assets.music.stop();

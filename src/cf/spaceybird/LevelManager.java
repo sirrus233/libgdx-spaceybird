@@ -5,7 +5,6 @@ import java.util.Map;
 
 import cf.spaceybird.actors.Obstacle;
 import cf.spaceybird.actors.Player;
-
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -13,6 +12,8 @@ import com.badlogic.gdx.utils.Array;
 public class LevelManager {
 
 	private static Player player = new Player(new Vector2());
+	//private static PlayerPredict playerPredict = new PlayerPredict(new Vector2());
+	private static Player playerPredict = new Player(new Vector2());
 	private static Vector2 startPos = new Vector2();
 	private static Array<Obstacle> obstacles = new Array<Obstacle>(false, 16);
 	private static Circle goal = new Circle(0, 0, 0.3f);
@@ -23,8 +24,13 @@ public class LevelManager {
 		currentLevel = level;
 		obstacles.clear();
 		switch(level) {
+		case 0:
+			initPlayer(2,2);
+			//obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
+			goal.setPosition(14,8);
+			break;
 		case 1:
-			initPlayer(3,3);		
+			initPlayer(3,3);
 			obstacles.add(new Obstacle(new Vector2(8,8), 0.5f));
 			goal.setPosition(10,3);
 			break;
@@ -49,6 +55,11 @@ public class LevelManager {
 		return player;
 	}
 	
+	//Returns the playerPredict object
+		public static Player getPlayerPredict() {
+			return playerPredict;
+		}
+	
 	//Returns an array of the level's obstacles
 	public static Array<Obstacle> getObstacles() {
 		return obstacles;
@@ -60,6 +71,10 @@ public class LevelManager {
 	
 	public static Vector2 getStartPos() {
 		return new Vector2(startPos);
+	}
+	
+	public static void setStartPos(Vector2 newPos) {
+		startPos = new Vector2(newPos);
 	}
 	
 	public static Circle getGoal() {
