@@ -103,7 +103,7 @@ public class GameScreen extends ScreenTemplate {
 			
 		case AIMING:
 			if (Input.getMouseNorm().dst(LevelManager.getStartPos()) < 2) {
-				this.player.updatePosition(Input.getMouseDeltaNorm());
+				this.player.setPosition(Input.getMouseNorm());
 			} else {
 				Vector2 newDirection = Input.getMouseNorm().sub(LevelManager.getStartPos()).nor().scl(2);
 				Vector2 newPosition = LevelManager.getStartPos().add(newDirection);
