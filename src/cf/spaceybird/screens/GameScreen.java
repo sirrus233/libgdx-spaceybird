@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Array;
 public class GameScreen extends ScreenTemplate {
 	private final float LAUNCH_FORCE_SCALE = 8;
 	
-	private enum State {
+	public enum State {
 		WAITING, AIMING, LAUNCHED, VICTORY
 	}
 	
@@ -27,12 +27,14 @@ public class GameScreen extends ScreenTemplate {
 	private Player player;
 	private Array<Obstacle> obstacles;
 	private Circle goal;
-	private State state;
 	private int score;
+	private State state;
+	public State readOnlyState;
 	
 	public GameScreen(Game g) {
 		this.game = g;
 		this.state = State.WAITING;
+		this.readOnlyState = this.state;
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
 		this.goal = LevelManager.getGoal();
@@ -153,6 +155,8 @@ public class GameScreen extends ScreenTemplate {
 		default:
 			System.out.println("Error: Invalid state accessed from GameScreen!");
 		}
+		
+		this.readOnlyState = this.state;
 	}
 	
 	private void resetPlayer() {
