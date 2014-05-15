@@ -5,13 +5,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 import cf.spaceybird.Assets;
 import cf.spaceybird.LevelManager;
 import cf.spaceybird.PhysicsEngine;
@@ -27,7 +25,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class LevelEditor extends ScreenTemplate {
+public class EditorScreen extends ScreenTemplate {
 private final float LAUNCH_FORCE_SCALE = 8;
 private final int PATH_LENGTH = 1024*2;
 private final int MAX_PATHS = 10;
@@ -59,7 +57,7 @@ private final int MAX_PATHS = 10;
 	
 	private int score;
 	
-	public LevelEditor(Game g) {
+	public EditorScreen(Game g) {
 		// TODO Auto-generated constructor stub
 		this.game = g;
 		this.state = State.WAITING;

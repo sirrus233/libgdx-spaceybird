@@ -61,7 +61,7 @@ public class MenuScreen extends ScreenTemplate {
 
 				
 			} else if (this.levEdButton.contains(Input.getMouseNorm())) {
-					this.game.setScreen(new LevelEditor(this.game));
+					this.game.setScreen(new EditorScreen(this.game));
 					
 			} else if (this.soundButton.contains(Input.getMouseNorm())) {
 				if (Assets.music.isPlaying()) {
