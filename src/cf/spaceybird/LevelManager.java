@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.Array;
 public class LevelManager {
 
 	private static Player player = new Player(new Vector2());
-	//private static PlayerPredict playerPredict = new PlayerPredict(new Vector2());
 	private static Player playerPredict = new Player(new Vector2());
 	private static Vector2 startPos = new Vector2();
 	private static Array<Obstacle> obstacles = new Array<Obstacle>(false, 16);
