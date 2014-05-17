@@ -189,8 +189,6 @@ public class EditorScreen extends GameScreen {
 			break;
 			
 		case AIMING:
-			System.out.println("pathPredict array size: " + predictPath.size() + ", Timestep: " + delta);
-			
 			//Begin path prediction calculations						
 			this.playerPredict.ready(super.getPlayer().getPosition());
 			this.predictPath.clear();
