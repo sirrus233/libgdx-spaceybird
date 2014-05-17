@@ -64,7 +64,7 @@ public class EditorScreen extends GameScreen {
 			debugRenderer.setProjectionMatrix(gameCam.combined);
 	        debugRenderer.begin(ShapeType.Line);
 	       
-	        //Draw historical pathing
+	        //Draw historical paths
 	        debugRenderer.setColor(0, 0.7f, 0.3f, 1);
 	        for (ArrayList<Vector2> path : this.pathHistory){	        	
 	        	for (int i = 1; i < path.size(); i++) {
@@ -72,7 +72,7 @@ public class EditorScreen extends GameScreen {
 	        	}   
 	        }
 	        
-	        //Draw predictive pathing
+	        //Draw predictive paths
 	        debugRenderer.setColor(0.8f, 0.7f, 0, 1);
         	for (int i = 1; i < predictPath.size(); i++) {
         		debugRenderer.line(predictPath.get(i-1), predictPath.get(i));
