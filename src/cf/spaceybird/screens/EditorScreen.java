@@ -196,16 +196,21 @@ public class EditorScreen extends GameScreen {
 			Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(super.getPlayer().getPosition());
 			this.playerPredict.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
 							
-			for (int i = 0; i < 1024 ; i++)
-			{
+			while (!isDead(this.playerPredict)) {
 				Vector2 gravForce = new Vector2();
 				for (Obstacle o : super.getObstacles()) {						
 					gravForce.add(PhysicsEngine.getGravForce(this.playerPredict, o));
-				}					
+				}
+				
 				this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
 				this.playerPredict.setVelocity(PhysicsEngine.getVelocity(this.playerPredict.getVelocity(), this.playerPredict.getAcceleration(), .015f));
 				//XXX Why is this scaling factor necessary?
-				predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));					
+				predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));
+				
+				//This handles the corner case where if the player has no velocity after acceleration is applied, then there 
+				//is an infinite loop condition because the player will never die. This generally happens in levels with no
+				//planets.
+				if (playerPredict.getVelocity().isZero()) { break; }
 			}				
 			break;
 		
@@ -231,7 +236,6 @@ public class EditorScreen extends GameScreen {
 		if (pathHistory.size() >= MAX_PATHS ){
 			pathHistory.remove(1);	
 		}
-		//Random rn = new Random();
 		
 		pathTrace = new ArrayList<Vector2>(PATH_LENGTH);
 		pathHistory.add(pathTrace);
