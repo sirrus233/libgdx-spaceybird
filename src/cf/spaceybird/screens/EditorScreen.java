@@ -189,13 +189,14 @@ public class EditorScreen extends GameScreen {
 			break;
 			
 		case AIMING:
-			//Begin path prediction calculations						
-			this.playerPredict.setPosition(super.getPlayer().getPosition());
+			//Begin path prediction calculations
 			this.predictPath.clear();
+			this.playerPredict.setPosition(super.getPlayer().getPosition());
+			
 			Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(super.getPlayer().getPosition());
 			this.playerPredict.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
 							
-			for (int i = 0; i <1024 ; i++)
+			for (int i = 0; i < 1024 ; i++)
 			{
 				Vector2 gravForce = new Vector2();
 				for (Obstacle o : super.getObstacles()) {						
@@ -203,7 +204,7 @@ public class EditorScreen extends GameScreen {
 				}					
 				this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
 				this.playerPredict.setVelocity(PhysicsEngine.getVelocity(this.playerPredict.getVelocity(), this.playerPredict.getAcceleration(), .015f));
-				predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));//XXX REFRESH RATE ISSUE					
+				predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity()));					
 			}				
 			break;
 		
