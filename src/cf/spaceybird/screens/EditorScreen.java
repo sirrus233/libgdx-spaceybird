@@ -39,7 +39,6 @@ public class EditorScreen extends GameScreen {
 	private ArrayList<Vector2> pathTrace;
 	private float[][][] pathColor; //TODO
 	private ArrayList<Vector2> predictPath;	
-	private long predictDelay;
 	
 	public EditorScreen(Game g) {
 		super(g);
@@ -51,7 +50,6 @@ public class EditorScreen extends GameScreen {
 		this.pathHistory.add(pathTrace);
 		this.pathColor = new float[MAX_PATHS][MAX_PATHS][MAX_PATHS];
 		this.predictPath = new ArrayList<Vector2>(1024);
-		this.predictDelay = 0;
 		
 		LevelManager.setLevel(0);
 	}
@@ -110,9 +108,9 @@ public class EditorScreen extends GameScreen {
 		if (Input.keys['r']) { resetBoard(); }
 		
 		editUpdate();
+		
 		if (this.state == EditorState.WAITING) { 
-			gameUpdate(delta);
-			
+			gameUpdate(delta);	
 		}
 	}
 	
@@ -179,8 +177,6 @@ public class EditorScreen extends GameScreen {
 		
 		switch (super.getGameState()) {
 		case WAITING:
-			this.predictDelay = System.currentTimeMillis();
-			
 			if (Input.keys['o']) {
 				this.state = EditorState.PLACING_OBSTACLE;
 			} 
@@ -194,27 +190,23 @@ public class EditorScreen extends GameScreen {
 			
 		case AIMING:
 			System.out.println("pathPredict array size: " + predictPath.size() + ", Timestep: " + delta);
-			System.out.println("Time diff: " +(System.currentTimeMillis() - predictDelay));
 			
-			//Begin path prediction calculations			
-			if((System.currentTimeMillis() - predictDelay) > 500){
-				this.predictDelay = System.currentTimeMillis();				
-				this.playerPredict.ready(super.getPlayer().getPosition());
-				this.predictPath.clear();
-				Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(super.getPlayer().getPosition());
-				this.playerPredict.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
-								
-				for (int i = 0; i <1024 ; i++)
-				{
-					Vector2 gravForce = new Vector2();
-					for (Obstacle o : super.getObstacles()) {						
-						gravForce.add(PhysicsEngine.getGravForce(this.playerPredict, o));
-					}					
-					this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
-					this.playerPredict.setVelocity(PhysicsEngine.getVelocity(this.playerPredict.getVelocity(), this.playerPredict.getAcceleration(), .015f));
-					predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));//XXX REFRESH RATE ISSUE					
-				}				
-			}
+			//Begin path prediction calculations						
+			this.playerPredict.ready(super.getPlayer().getPosition());
+			this.predictPath.clear();
+			Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(super.getPlayer().getPosition());
+			this.playerPredict.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
+							
+			for (int i = 0; i <1024 ; i++)
+			{
+				Vector2 gravForce = new Vector2();
+				for (Obstacle o : super.getObstacles()) {						
+					gravForce.add(PhysicsEngine.getGravForce(this.playerPredict, o));
+				}					
+				this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
+				this.playerPredict.setVelocity(PhysicsEngine.getVelocity(this.playerPredict.getVelocity(), this.playerPredict.getAcceleration(), .015f));
+				predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));//XXX REFRESH RATE ISSUE					
+			}				
 			break;
 		
 		case LAUNCHED:
