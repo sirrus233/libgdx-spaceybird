@@ -16,10 +16,10 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class GameScreen extends ScreenTemplate {
-	private final float LAUNCH_FORCE_SCALE = 8;
+public class GameScreen extends AbstractScreen {
+	public final float LAUNCH_FORCE_SCALE = 8;
 	
-	public enum State {
+	public enum GameState {
 		WAITING, AIMING, LAUNCHED, VICTORY
 	}
 	
@@ -28,13 +28,11 @@ public class GameScreen extends ScreenTemplate {
 	private Array<Obstacle> obstacles;
 	private Circle goal;
 	private int score;
-	private State state;
-	public State readOnlyState;
+	private GameState state;
 	
 	public GameScreen(Game g) {
 		this.game = g;
-		this.state = State.WAITING;
-		this.readOnlyState = this.state;
+		this.state = GameState.WAITING;
 		this.player = LevelManager.getPlayer();
 		this.obstacles = LevelManager.getObstacles();
 		this.goal = LevelManager.getGoal();
@@ -42,7 +40,7 @@ public class GameScreen extends ScreenTemplate {
 		
 		LevelManager.setLevel(1);
 	}
-
+	
 	@Override
 	public void draw() {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
@@ -99,7 +97,7 @@ public class GameScreen extends ScreenTemplate {
 		switch(state) {
 		case WAITING:
 			if (Input.buttonsDown[Input.LEFT] && this.player.getBounds().contains(Input.getMouseNorm())) {
-				this.state = State.AIMING;
+				this.state = GameState.AIMING;
 			}
 			break;
 			
@@ -114,7 +112,7 @@ public class GameScreen extends ScreenTemplate {
 			if (Input.buttonsClicked[Input.LEFT]) {
 				Vector2 launch = LevelManager.getStartPos().sub(this.player.getPosition());
 				this.player.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
-				this.state = State.LAUNCHED;
+				this.state = GameState.LAUNCHED;
 			}
 			break;
 			
@@ -132,7 +130,7 @@ public class GameScreen extends ScreenTemplate {
 			if (hitObstacle) {
 				resetPlayer();
 			} else if (this.goal.overlaps(this.player.getBounds())) {
-				this.state = State.VICTORY;
+				this.state = GameState.VICTORY;
 			} else if (this.player.getBounds().x > unitsX + this.player.getBounds().radius ||
 					this.player.getBounds().x < -this.player.getBounds().radius ||
 					this.player.getBounds().y > unitsY + this.player.getBounds().radius ||
@@ -155,14 +153,24 @@ public class GameScreen extends ScreenTemplate {
 		default:
 			System.out.println("Error: Invalid state accessed from GameScreen!");
 		}
-		
-		this.readOnlyState = this.state;
 	}
 	
 	private void resetPlayer() {
 		this.score = 0;
 		this.player.setPosition(LevelManager.getStartPos());
-		this.state = State.WAITING;
+		this.state = GameState.WAITING;
+	}
+	
+	public GameState getGameState() {
+		return this.state;
+	}
+	
+	public Player getPlayer() {
+		return player;
+	}
+	
+	public Array<Obstacle> getObstacles() {
+		return obstacles;
 	}
 
 }

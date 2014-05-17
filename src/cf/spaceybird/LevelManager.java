@@ -66,7 +66,7 @@ public class LevelManager {
 	}
 	
 	public static void nextLevel() {
-		setLevel(++currentLevel);
+		if (currentLevel > 0) { setLevel(++currentLevel); }
 	}
 	
 	public static Vector2 getStartPos() {

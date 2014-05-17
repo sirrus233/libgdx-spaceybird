@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import cf.spaceybird.Assets;
+import cf.spaceybird.Input;
 import cf.spaceybird.LevelManager;
 import cf.spaceybird.PhysicsEngine;
 import cf.spaceybird.actors.Obstacle;
@@ -19,24 +20,20 @@ import cf.spaceybird.actors.Player;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+
 
 public class EditorScreen extends GameScreen {
 	private final int PATH_LENGTH = 1024*2;
 	private final int MAX_PATHS = 10;
 	
-	private enum State {
-		PLACING_OBSTACLE, PLACING_PLAYER, PLACED
+	private enum EditorState {
+		WAITING, PLACING_OBSTACLE, PLACING_PLAYER
 	}
 	
-	private boolean editing;
-	private State state;
+	private Game game;
+	private EditorState state;
 	private Player playerPredict;
 	private ArrayList<ArrayList<Vector2>> pathHistory;
 	private ArrayList<Vector2> pathTrace;
@@ -46,9 +43,8 @@ public class EditorScreen extends GameScreen {
 	
 	public EditorScreen(Game g) {
 		super(g);
-		
-		this.editing = false;
-		this.state = super.readOnlyState;
+		this.game = g;
+		this.state = EditorState.WAITING;
 		this.playerPredict = LevelManager.getPlayerPredict();
 		this.pathHistory = new ArrayList<ArrayList<Vector2>>(MAX_PATHS);
 		this.newPathTrace(); //PT		
@@ -85,8 +81,7 @@ public class EditorScreen extends GameScreen {
 	        debugRenderer.end();
 		}
 		
-		switch(state)
-		{	
+		switch (state) {	
 		case PLACING_OBSTACLE:
 			batch.setProjectionMatrix(fontCam.combined);
 			batch.begin();
@@ -111,24 +106,89 @@ public class EditorScreen extends GameScreen {
 	}
 
 	public void update(float delta) {				
+		if (Input.keys[Input.ESC]) { this.game.setScreen(new MenuScreen(this.game)); }
+		if (Input.keys['r']) { resetBoard(); }
+		
+		editUpdate();
+		if (this.state == EditorState.WAITING) { 
+			gameUpdate(delta);
+			
+		}
+	}
+	
+	private void editUpdate() {
+		switch (this.state) {
+		case WAITING:
+			break;
+			
+		case PLACING_PLAYER:
+			super.getPlayer().setPosition(Input.getMouseNorm());
+			if (Input.buttonsClicked[Input.LEFT]){
+				LevelManager.setStartPos(Input.getMouseNorm());
+				this.state = EditorState.WAITING;
+			}
+			break;
+			
+		case PLACING_OBSTACLE:
+			if (Input.keys['1']) {				
+				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 0.5f, 1));
+				this.state = EditorState.WAITING;
+			}
+			else if (Input.keys['2']) {
+				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 0.5f, 2));
+				this.state = EditorState.WAITING;
+			}
+			else if (Input.keys['3']) {
+				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 1f, 3));
+				this.state = EditorState.WAITING;
+			}
+			else if (Input.keys['4']) {
+				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 1f, 4));
+				this.state = EditorState.WAITING;
+			}
+			else if (Input.keys['5']) {
+				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 2f, 5));
+				this.state = EditorState.WAITING;
+			}
+			else if (Input.keys['6']) {
+				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 2f, 6));
+				this.state = EditorState.WAITING;
+			}
+			else if (Input.keys['7']) {
+				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 1f, 7));
+				this.state = EditorState.WAITING;
+			}
+			else if (Input.keys['8']) {
+				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 0.5f, 8));
+				this.state = EditorState.WAITING;
+			}
+			else if (Input.keys['0']) {
+				super.getObstacles().clear();
+				this.state = EditorState.WAITING;
+			}
+			
+			break;
+			
+		default:
+			System.out.println("Error: Invalid state accessed from EditorScreen!");
+		}
+	}
+	
+	private void gameUpdate(float delta) {
 		super.update(delta);
 		
-		switch(readOnlyState) {
+		switch (super.getGameState()) {
 		case WAITING:
 			this.predictDelay = System.currentTimeMillis();
 			
-			if (Gdx.input.isKeyPressed(Input.Keys.O)) {
-				this.state = State.PLACING_OBSTACLE;
+			if (Input.keys['o']) {
+				this.state = EditorState.PLACING_OBSTACLE;
 			} 
-			else if (Gdx.input.isKeyPressed(Input.Keys.P)) {
-				this.state = State.PLACING_PLAYER;
+			else if (Input.keys['p']) {
+				this.state = EditorState.PLACING_PLAYER;
 			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.R)) {				
-				resetBoard();
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.S)) {				
+			else if (Input.keys['s']) {				
 				saveLevel();
-				System.out.println("pressed S");
 			}
 			break;
 			
@@ -139,15 +199,15 @@ public class EditorScreen extends GameScreen {
 			//Begin path prediction calculations			
 			if((System.currentTimeMillis() - predictDelay) > 500){
 				this.predictDelay = System.currentTimeMillis();				
-				this.playerPredict.ready(this.player.getPosition());
+				this.playerPredict.ready(super.getPlayer().getPosition());
 				this.predictPath.clear();
-				Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(this.player.getPosition());
+				Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(super.getPlayer().getPosition());
 				this.playerPredict.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
 								
 				for (int i = 0; i <1024 ; i++)
 				{
 					Vector2 gravForce = new Vector2();
-					for (Obstacle o : this.obstacles) {						
+					for (Obstacle o : super.getObstacles()) {						
 						gravForce.add(PhysicsEngine.getGravForce(this.playerPredict, o));
 					}					
 					this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
@@ -156,92 +216,23 @@ public class EditorScreen extends GameScreen {
 				}				
 			}
 			break;
-			
-		case LAUNCHED:			
-			if (Gdx.input.isKeyPressed(Input.Keys.R)) {				
-				resetBoard();
-				this.state = State.WAITING;
-			}
+		
+		case LAUNCHED:
 			break;
 			
 		case VICTORY:
-			resetPlayer();
-			break;
-			
-		case PLACING_PLAYER:
-			player.setPosition(this.mouseNorm);
-			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-				LevelManager.setStartPos(this.mouseNorm);
-				this.state = State.PLACED;
-			}
-			break;
-			
-		case PLACED:			
-			if (!Gdx.input.isButtonPressed(Input.Buttons.LEFT)){				
-				this.state = State.WAITING;
-			}
-			break;
-			
-		case PLACING_OBSTACLE:
-			
-			 if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)) {				
-				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 0.5f, 1));
-				this.state = State.WAITING;
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.NUM_2)) {
-				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 0.5f, 2));
-				this.state = State.WAITING;
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.NUM_3)) {
-				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 1f, 3));
-				this.state = State.WAITING;
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.NUM_4)) {
-				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 1f, 4));
-				this.state = State.WAITING;
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.NUM_5)) {
-				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 2f, 5));
-				this.state = State.WAITING;
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.NUM_6)) {
-				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 2f, 6));
-				this.state = State.WAITING;
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.NUM_7)) {
-				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 1f, 7));
-				this.state = State.WAITING;
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.NUM_8)) {
-				obstacles.add(new Obstacle(new Vector2(this.mouseNorm), 0.5f, 8));
-				this.state = State.WAITING;
-			}
-			else if (Gdx.input.isKeyPressed(Input.Keys.NUM_0)) {
-				obstacles.clear();
-				this.state = State.WAITING;
-			}
-			
+			newPathTrace();
 			break;
 			
 		default:
-			System.out.println("Error: Invalid state accessed from GameScreen!");
+			System.out.println("Error: Invalid state accessed from EditorScreen!");
 		}
 	}
 	
-	private void resetPlayer() {
-		this.score = 0;
-		newPathTrace();
-		this.player.setPosition(LevelManager.getStartPos());
-		this.state = State.WAITING;
-	}
-	
 	private void resetBoard() {
-		this.score = 0;
-		pathHistory.clear();
 		newPathTrace();
-		this.player.setPosition(LevelManager.getStartPos());		
+		pathHistory.clear();
 		predictPath.clear();
-		this.state = State.WAITING;
 	}
 	
 	private void newPathTrace() { //PT
@@ -255,7 +246,7 @@ public class EditorScreen extends GameScreen {
 	}
 	
 	private void incrementPath() {
-		oldPosition = this.player.getPosition();
+		Vector2 oldPosition = super.getPlayer().getPosition();
 		if (pathTrace.size() < PATH_LENGTH ){
 			pathTrace.add(oldPosition);	
 		}
@@ -269,21 +260,19 @@ public class EditorScreen extends GameScreen {
 		File f = new File("D:\\Mason\\SBSaves\\SpaceyBirdLevel-" + myDate + ".txt");;
 		
 		try {
-			
-		    boolean created = f.createNewFile();
 		    FileOutputStream os = new FileOutputStream(f);
 		    OutputStreamWriter osw = new OutputStreamWriter(os);
 		    Writer w = new BufferedWriter(osw);
 			//Writer writer = new BufferedWriter(new OutputStreamWriter(
 		     //     new FileOutputStream("SpaceyBirdLevel-" + myDate + ".txt")));
-		    for (Obstacle o : this.obstacles) {
+		    for (Obstacle o : super.getObstacles()) {
 		    	w.write(o.getBounds().toString() +"|"+ o.getMass() + "$");				
 			}
-		    w.write(this.player.getPosition().toString());
+		    w.write(super.getPlayer().getPosition().toString());
 		    w.flush();w.close();
 		    System.out.println("Should print");
 		} catch (IOException ex) {
-			System.out.println("PROLEMS");
+			System.out.println("PROBLEMS");
 			System.out.println(f.toString());
 			System.out.println(ex.getMessage());
 		}		

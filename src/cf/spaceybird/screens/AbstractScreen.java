@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-public abstract class ScreenTemplate implements Screen {
+public abstract class AbstractScreen implements Screen {
 	final boolean DEBUG = true;
 	
 	static OrthographicCamera gameCam;

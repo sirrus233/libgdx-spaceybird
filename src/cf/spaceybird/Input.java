@@ -1,6 +1,6 @@
 package cf.spaceybird;
 
-import cf.spaceybird.screens.ScreenTemplate;
+import cf.spaceybird.screens.AbstractScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -14,6 +14,10 @@ public class Input implements InputProcessor {
 	
 	//Unicode char constants, for comparison in keyTyped method
 	public static final char ESC = '\u001B';
+	//public static final char O = '\u006F';
+	//public static final char P = '\u0070';
+	//public static final char R = '\u0072';
+	//public static final char S = '\u0073';
 	
 	//Mouse vectors
 	private static Vector2 mouse = new Vector2();
@@ -65,8 +69,8 @@ public class Input implements InputProcessor {
 		mouse.set(screenX, Gdx.graphics.getHeight() - screenY);
 						
 		//mouse vectors, normalized to work in terms of screen units instead of pixels
-		mouseDeltaNorm.set(getMouseDelta().div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
-		mouseNorm.set(getMouse().div(ScreenTemplate.ppuX,ScreenTemplate.ppuY));
+		mouseDeltaNorm.set(getMouseDelta().div(AbstractScreen.ppuX,AbstractScreen.ppuY));
+		mouseNorm.set(getMouse().div(AbstractScreen.ppuX,AbstractScreen.ppuY));
 	}
 	
 	@Override

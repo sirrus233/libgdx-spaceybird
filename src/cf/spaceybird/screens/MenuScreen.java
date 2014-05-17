@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
-public class MenuScreen extends ScreenTemplate {
+public class MenuScreen extends AbstractScreen {
 	private Game game;
 	private Rectangle startButton;
 	private Rectangle soundButton;
@@ -55,6 +55,10 @@ public class MenuScreen extends ScreenTemplate {
 
 	@Override
 	public void update(float delta) {
+		if (Input.keys[Input.ESC]) {
+			Gdx.app.exit();
+		}
+		
 		if (Input.buttonsClicked[Input.LEFT]) {
 			if (this.startButton.contains(Input.getMouseNorm())) {
 				this.game.setScreen(new GameScreen(this.game));
