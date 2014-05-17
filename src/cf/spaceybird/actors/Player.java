@@ -77,10 +77,4 @@ public class Player {
 		this.updatePosition(deltaP.x, deltaP.y);
 		return this.getPosition();
 	}
-	
-	public void ready(Vector2 position){
-		this.position = position;
-		velocity = new Vector2();
-		acceleration = new Vector2();
-	}
 }

@@ -190,7 +190,7 @@ public class EditorScreen extends GameScreen {
 			
 		case AIMING:
 			//Begin path prediction calculations						
-			this.playerPredict.ready(super.getPlayer().getPosition());
+			this.playerPredict.setPosition(super.getPlayer().getPosition());
 			this.predictPath.clear();
 			Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(super.getPlayer().getPosition());
 			this.playerPredict.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
