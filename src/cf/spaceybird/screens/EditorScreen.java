@@ -204,7 +204,8 @@ public class EditorScreen extends GameScreen {
 				}					
 				this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
 				this.playerPredict.setVelocity(PhysicsEngine.getVelocity(this.playerPredict.getVelocity(), this.playerPredict.getAcceleration(), .015f));
-				predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity()));					
+				//XXX Why is this scaling factor necessary?
+				predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));					
 			}				
 			break;
 		
