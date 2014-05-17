@@ -241,13 +241,6 @@ public class EditorScreen extends GameScreen {
 		pathHistory.add(pathTrace);
 	}
 	
-	private void incrementPath() {
-		Vector2 oldPosition = super.getPlayer().getPosition();
-		if (pathTrace.size() < PATH_LENGTH ){
-			pathTrace.add(oldPosition);	
-		}
-	}
-	
 	//FIXME
 	private void saveLevel() {
 		DateFormat dateFormat = new SimpleDateFormat("MM_dd_yyyy-HH:mm:ss");
