@@ -117,24 +117,16 @@ public class GameScreen extends AbstractScreen {
 			break;
 			
 		case LAUNCHED:
+			if (this.goal.overlaps(this.player.getBounds())) {
+				this.state = GameState.VICTORY;
+			}
+			
 			Vector2 gravForce = new Vector2();
-			boolean hitObstacle = false;
 			for (Obstacle o : this.obstacles) {
-				if (o.getBounds().overlaps(this.player.getBounds())) {
-					hitObstacle = true;
-					break;
-				}
 				gravForce.add(PhysicsEngine.getGravForce(this.player, o));
 			}
 			
-			if (hitObstacle) {
-				resetPlayer();
-			} else if (this.goal.overlaps(this.player.getBounds())) {
-				this.state = GameState.VICTORY;
-			} else if (this.player.getBounds().x > unitsX + this.player.getBounds().radius ||
-					this.player.getBounds().x < -this.player.getBounds().radius ||
-					this.player.getBounds().y > unitsY + this.player.getBounds().radius ||
-					this.player.getBounds().y < -this.player.getBounds().radius) {
+			if (isDead(this.player)) {
 				resetPlayer();
 			} else {
 				Vector2 oldPosition = this.player.getPosition();
@@ -153,6 +145,21 @@ public class GameScreen extends AbstractScreen {
 		default:
 			System.out.println("Error: Invalid state accessed from GameScreen!");
 		}
+	}
+	
+	protected boolean isDead(Player p) {
+		for (Obstacle o : this.obstacles) {
+			if (o.getBounds().overlaps(p.getBounds())) {
+				return true;
+			}
+		}
+		
+		boolean offRight = p.getBounds().x > unitsX + p.getBounds().radius;
+		boolean offLeft = p.getBounds().x < -p.getBounds().radius;
+		boolean offTop = p.getBounds().y > unitsY + p.getBounds().radius;
+		boolean offBottom = p.getBounds().y < -p.getBounds().radius;
+		
+		return  offRight || offLeft || offTop || offBottom;
 	}
 	
 	private void resetPlayer() {
