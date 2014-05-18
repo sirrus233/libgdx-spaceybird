@@ -98,7 +98,7 @@ public class GameScreen extends AbstractScreen {
         
         debugRenderer.end();
         
-		if (DEBUG) {
+		if (debug) {
 			debugRenderer.setProjectionMatrix(gameCam.combined);
 	        debugRenderer.begin(ShapeType.Line);
 	        

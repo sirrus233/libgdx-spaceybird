@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class AbstractScreen implements Screen {
-	final boolean DEBUG = true;
 	
+	static boolean debug = false;
 	static OrthographicCamera gameCam;
 	static OrthographicCamera fontCam;
 	static SpriteBatch batch;
@@ -48,6 +48,10 @@ public abstract class AbstractScreen implements Screen {
 	
 	@Override
 	public void render(float delta) {
+		if (Input.keys['d']) {
+			debug = !debug;
+		}
+		
 		update(delta);
 		draw();
 		Input.clear();

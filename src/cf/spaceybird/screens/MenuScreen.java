@@ -42,7 +42,7 @@ public class MenuScreen extends AbstractScreen {
 		Assets.font.draw(batch, "LevEd", 7f*ppuX, 2.7f*ppuY);
 		batch.end();
 		
-		if (DEBUG) {
+		if (debug) {
 			debugRenderer.setProjectionMatrix(gameCam.combined);
 			debugRenderer.begin(ShapeType.Line);
 			debugRenderer.setColor(new Color(1, 0, 0, 1));
