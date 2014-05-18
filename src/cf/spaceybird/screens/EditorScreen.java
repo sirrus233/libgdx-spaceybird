@@ -25,7 +25,6 @@ import com.badlogic.gdx.math.Vector2;
 
 
 public class EditorScreen extends GameScreen {
-	private final int PATH_LENGTH = 1024*2;
 	private final int MAX_PATHS = 10;
 	
 	private enum EditorState {
@@ -234,7 +233,7 @@ public class EditorScreen extends GameScreen {
 			pathHistory.remove(1);	
 		}
 		
-		pathTrace = new ArrayList<Vector2>(PATH_LENGTH);
+		pathTrace = new ArrayList<Vector2>();
 		pathHistory.add(pathTrace);
 	}
 	
