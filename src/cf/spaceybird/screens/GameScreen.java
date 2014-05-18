@@ -145,7 +145,7 @@ public class GameScreen extends AbstractScreen {
 				if (this.pathHistory.size() >= MAX_PATHS ){
 					this.pathHistory.remove(1);	
 				}
-				this.pathHistory.add(predictPath);
+				this.pathHistory.add(new ArrayList<Vector2>(this.predictPath));
 				
 				Vector2 launch = LevelManager.getStartPos().sub(this.player.getPosition());
 				this.player.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
@@ -174,7 +174,9 @@ public class GameScreen extends AbstractScreen {
 			}
 			break;
 			
-		case VICTORY:			
+		case VICTORY:
+			this.predictPath.clear();
+			this.pathHistory.clear();
 			LevelManager.nextLevel();
 			resetPlayer();
 			break;
