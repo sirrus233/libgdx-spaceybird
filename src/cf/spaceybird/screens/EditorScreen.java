@@ -8,45 +8,28 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import cf.spaceybird.Assets;
 import cf.spaceybird.Input;
 import cf.spaceybird.LevelManager;
-import cf.spaceybird.PhysicsEngine;
 import cf.spaceybird.actors.Obstacle;
-import cf.spaceybird.actors.Player;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
-
 public class EditorScreen extends GameScreen {
-	private final int MAX_PATHS = 10;
 	
-	private enum EditorState {
+	public enum EditorState {
 		WAITING, PLACING_OBSTACLE, PLACING_PLAYER
 	}
 	
 	private EditorState state;
-	private Player playerPredict;
-	private ArrayList<ArrayList<Vector2>> pathHistory;
-	private ArrayList<Vector2> pathTrace;
-	private float[][][] pathColor; //TODO
-	private ArrayList<Vector2> predictPath;	
 	
 	public EditorScreen(Game g) {
 		super(g);
-		this.state = EditorState.WAITING;
-		this.playerPredict = LevelManager.getPlayerPredict();
-		this.pathHistory = new ArrayList<ArrayList<Vector2>>(MAX_PATHS);
-		this.newPathTrace(); //PT		
-		this.pathHistory.add(pathTrace);
-		this.pathColor = new float[MAX_PATHS][MAX_PATHS][MAX_PATHS];
-		this.predictPath = new ArrayList<Vector2>(1024);
+		this.state = EditorState.WAITING;		
 		
 		LevelManager.setLevel(0);
 	}
@@ -54,27 +37,6 @@ public class EditorScreen extends GameScreen {
 	@Override
 	public void draw() {
 		super.draw();
-		
-		if (DEBUG) {
-			debugRenderer.setProjectionMatrix(gameCam.combined);
-	        debugRenderer.begin(ShapeType.Line);
-	       
-	        //Draw historical paths
-	        debugRenderer.setColor(0, 0.7f, 0.3f, 1);
-	        for (ArrayList<Vector2> path : this.pathHistory){	        	
-	        	for (int i = 1; i < path.size(); i++) {
-	        		debugRenderer.line(path.get(i-1), path.get(i));
-	        	}   
-	        }
-	        
-	        //Draw predictive paths
-	        debugRenderer.setColor(0.8f, 0.7f, 0, 1);
-        	for (int i = 1; i < predictPath.size(); i++) {
-        		debugRenderer.line(predictPath.get(i-1), predictPath.get(i));
-        	}   
-	        
-	        debugRenderer.end();
-		}
 		
 		switch (state) {	
 		case PLACING_OBSTACLE:
@@ -100,17 +62,19 @@ public class EditorScreen extends GameScreen {
 		}
 	}
 
-	public void update(float delta) {				
-		if (Input.keys['r']) { resetBoard(); }
-		
-		editUpdate();
-		
-		if (this.state == EditorState.WAITING) { 
-			gameUpdate(delta);	
+	public void update(float delta) {
+		if (super.getGameState() == GameState.WAITING) {
+			if (Input.keys['o']) {
+				this.state = EditorState.PLACING_OBSTACLE;
+			} 
+			else if (Input.keys['p']) {
+				this.state = EditorState.PLACING_PLAYER;
+			}
+			else if (Input.keys['s']) {				
+				saveLevel();
+			}
 		}
-	}
-	
-	private void editUpdate() {
+		
 		switch (this.state) {
 		case WAITING:
 			break;
@@ -166,75 +130,10 @@ public class EditorScreen extends GameScreen {
 		default:
 			System.out.println("Error: Invalid state accessed from EditorScreen!");
 		}
-	}
-	
-	private void gameUpdate(float delta) {
-		super.update(delta);
 		
-		switch (super.getGameState()) {
-		case WAITING:
-			if (Input.keys['o']) {
-				this.state = EditorState.PLACING_OBSTACLE;
-			} 
-			else if (Input.keys['p']) {
-				this.state = EditorState.PLACING_PLAYER;
-			}
-			else if (Input.keys['s']) {				
-				saveLevel();
-			}
-			break;
-			
-		case AIMING:
-			//Begin path prediction calculations
-			this.predictPath.clear();
-			this.playerPredict.setPosition(super.getPlayer().getPosition());
-			
-			Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(super.getPlayer().getPosition());
-			this.playerPredict.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
-							
-			while (!isDead(this.playerPredict)) {
-				Vector2 gravForce = new Vector2();
-				for (Obstacle o : super.getObstacles()) {						
-					gravForce.add(PhysicsEngine.getGravForce(this.playerPredict, o));
-				}
-				
-				this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
-				this.playerPredict.setVelocity(PhysicsEngine.getVelocity(this.playerPredict.getVelocity(), this.playerPredict.getAcceleration(), .015f));
-				//XXX Why is this scaling factor necessary?
-				predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));
-				
-				//This handles the corner case where if the player has no velocity after acceleration is applied, then there 
-				//is an infinite loop condition because the player will never die. This generally happens in levels with no
-				//planets.
-				if (playerPredict.getVelocity().isZero()) { break; }
-			}				
-			break;
-		
-		case LAUNCHED:
-			break;
-			
-		case VICTORY:
-			newPathTrace();
-			break;
-			
-		default:
-			System.out.println("Error: Invalid state accessed from EditorScreen!");
+		if (this.state == EditorState.WAITING) { 
+			super.update(delta);	
 		}
-	}
-	
-	private void resetBoard() {
-		newPathTrace();
-		pathHistory.clear();
-		predictPath.clear();
-	}
-	
-	private void newPathTrace() { //PT
-		if (pathHistory.size() >= MAX_PATHS ){
-			pathHistory.remove(1);	
-		}
-		
-		pathTrace = new ArrayList<Vector2>();
-		pathHistory.add(pathTrace);
 	}
 	
 	//FIXME
