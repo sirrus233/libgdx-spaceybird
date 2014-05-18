@@ -32,7 +32,6 @@ public class EditorScreen extends GameScreen {
 		WAITING, PLACING_OBSTACLE, PLACING_PLAYER
 	}
 	
-	private Game game;
 	private EditorState state;
 	private Player playerPredict;
 	private ArrayList<ArrayList<Vector2>> pathHistory;
@@ -42,7 +41,6 @@ public class EditorScreen extends GameScreen {
 	
 	public EditorScreen(Game g) {
 		super(g);
-		this.game = g;
 		this.state = EditorState.WAITING;
 		this.playerPredict = LevelManager.getPlayerPredict();
 		this.pathHistory = new ArrayList<ArrayList<Vector2>>(MAX_PATHS);
@@ -104,7 +102,6 @@ public class EditorScreen extends GameScreen {
 	}
 
 	public void update(float delta) {				
-		if (Input.keys[Input.ESC]) { this.game.setScreen(new MenuScreen(this.game)); }
 		if (Input.keys['r']) { resetBoard(); }
 		
 		editUpdate();
