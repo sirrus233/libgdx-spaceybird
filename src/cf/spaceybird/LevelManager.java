@@ -55,9 +55,9 @@ public class LevelManager {
 	}
 	
 	//Returns the playerPredict object
-		public static Player getPlayerPredict() {
-			return playerPredict;
-		}
+	public static Player getPlayerPredict() {
+		return playerPredict;
+	}
 	
 	//Returns an array of the level's obstacles
 	public static Array<Obstacle> getObstacles() {
@@ -81,11 +81,11 @@ public class LevelManager {
 	}
 	
 	public static void loadScores(){
-		//TODO Loads in scores from gamesave file.
+		//TODO Loads in scores from game save file.
 	}
 	
 	public static void setScore(int score){
 		scores.put(currentLevel, score);
-		//TODO Write score to gamesave file.
+		//TODO Write score to game save file.
 	}
 }
