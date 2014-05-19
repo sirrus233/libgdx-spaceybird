@@ -5,7 +5,6 @@ import cf.spaceybird.Input;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
@@ -45,7 +44,7 @@ public class MenuScreen extends AbstractScreen {
 		if (debug) {
 			debugRenderer.setProjectionMatrix(gameCam.combined);
 			debugRenderer.begin(ShapeType.Line);
-			debugRenderer.setColor(new Color(1, 0, 0, 1));
+			debugRenderer.setColor(1, 0, 0, 1);
 			debugRenderer.rect(this.startButton.x, this.startButton.y, this.startButton.width, this.startButton.height);
 			debugRenderer.rect(this.soundButton.x, this.soundButton.y, this.soundButton.width, this.soundButton.height);
 			debugRenderer.rect(this.levEdButton.x, this.levEdButton.y, this.levEdButton.width, this.levEdButton.height);
