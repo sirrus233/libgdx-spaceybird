@@ -11,7 +11,6 @@ import cf.spaceybird.actors.Player;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
@@ -29,7 +28,7 @@ public class GameScreen extends AbstractScreen {
 	private Game game;
 	private Player player;
 	private Player playerPredict;
-	private ArrayList<Vector2> predictPath;	
+	private ArrayList<Vector2> predictPath;
 	private ArrayList<ArrayList<Vector2>> pathHistory;
 	private Array<Obstacle> obstacles;
 	private Circle goal;
@@ -102,7 +101,7 @@ public class GameScreen extends AbstractScreen {
 			debugRenderer.setProjectionMatrix(gameCam.combined);
 	        debugRenderer.begin(ShapeType.Line);
 	        
-	        debugRenderer.setColor(new Color(1, 0, 0, 1));
+	        debugRenderer.setColor(1, 0, 0, 1);
 	        debugRenderer.circle(this.player.getBounds().x, this.player.getBounds().y, this.player.getBounds().radius, 1200);
 	        for (Obstacle o : this.obstacles) {
 	        	debugRenderer.circle(o.getBounds().x, o.getBounds().y, o.getBounds().radius, 1200);
@@ -143,9 +142,9 @@ public class GameScreen extends AbstractScreen {
 			}
 			if (Input.buttonsClicked[Input.LEFT]) {
 				if (this.pathHistory.size() >= MAX_PATHS ){
-					this.pathHistory.remove(1);	
+					this.pathHistory.remove(0);
 				}
-				this.pathHistory.add(new ArrayList<Vector2>(this.predictPath));
+				this.pathHistory.add(new ArrayList<Vector2>());
 				
 				Vector2 launch = LevelManager.getStartPos().sub(this.player.getPosition());
 				this.player.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
@@ -167,10 +166,15 @@ public class GameScreen extends AbstractScreen {
 				resetPlayer();
 			} else {
 				Vector2 oldPosition = this.player.getPosition();
+				
 				this.player.setAcceleration(PhysicsEngine.getAcceleration(this.player.getMass(), gravForce));
 				this.player.setVelocity(PhysicsEngine.getVelocity(this.player.getVelocity(), this.player.getAcceleration(), delta));
 				this.player.updatePosition(this.player.getVelocity().scl(delta));
 				this.score += this.player.getPosition().sub(oldPosition).len() *100;
+				
+				int lastIndex = this.pathHistory.size() - 1;
+				ArrayList<Vector2> travelPath = this.pathHistory.get(lastIndex);
+				travelPath.add(new Vector2(this.player.getPosition()));
 			}
 			break;
 			
