@@ -54,11 +54,28 @@ public class GameScreen extends AbstractScreen {
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
+		//Draw background
 		batch.setProjectionMatrix(gameCam.combined);
 		batch.begin();
 		batch.disableBlending();
 		batch.draw(Assets.background, 0, 0, unitsX, unitsY);
 		batch.enableBlending();
+		batch.end();
+		
+		//Draw historical paths
+		debugRenderer.setProjectionMatrix(gameCam.combined);
+        debugRenderer.begin(ShapeType.Line);
+        
+        debugRenderer.setColor(0, 0.7f, 0.3f, 1);
+        for (ArrayList<Vector2> path : this.pathHistory){	        	
+        	for (int i = 1; i < path.size(); i++) {
+        		debugRenderer.line(path.get(i-1), path.get(i));
+        	}   
+        }
+        
+        //Draw player, obstacles, and goal
+        batch.setProjectionMatrix(gameCam.combined);
+		batch.begin();
 		batch.draw(Assets.spaceyBird, this.player.getBounds().x - this.player.getBounds().radius, 
 				this.player.getBounds().y - this.player.getBounds().radius, 
 				2*this.player.getBounds().radius, 2*this.player.getBounds().radius);
@@ -79,28 +96,20 @@ public class GameScreen extends AbstractScreen {
 				2*this.goal.radius, 2*this.goal.radius);
 		batch.end();
 		
+		//Draw text
 		batch.setProjectionMatrix(fontCam.combined);
 		batch.begin();
 		Assets.font.draw(batch, "Score:"+this.score, Gdx.graphics.getWidth()-3*ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
 		batch.end();
 		
-        //Draw historical paths
-		debugRenderer.setProjectionMatrix(gameCam.combined);
-        debugRenderer.begin(ShapeType.Line);
         
-        debugRenderer.setColor(0, 0.7f, 0.3f, 1);
-        for (ArrayList<Vector2> path : this.pathHistory){	        	
-        	for (int i = 1; i < path.size(); i++) {
-        		debugRenderer.line(path.get(i-1), path.get(i));
-        	}   
-        }
         
         debugRenderer.end();
         
 		if (debug) {
+			//Draw bounding boxes
 			debugRenderer.setProjectionMatrix(gameCam.combined);
 	        debugRenderer.begin(ShapeType.Line);
-	        
 	        debugRenderer.setColor(1, 0, 0, 1);
 	        debugRenderer.circle(this.player.getBounds().x, this.player.getBounds().y, this.player.getBounds().radius, 1200);
 	        for (Obstacle o : this.obstacles) {
@@ -205,7 +214,6 @@ public class GameScreen extends AbstractScreen {
 			
 			this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
 			this.playerPredict.setVelocity(PhysicsEngine.getVelocity(this.playerPredict.getVelocity(), this.playerPredict.getAcceleration(), .015f));
-			//XXX Why is this scaling factor necessary?
 			predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));
 			
 			//This handles the corner case where if the player has no velocity after acceleration is applied, then there 
