@@ -55,7 +55,7 @@ public class PhysicsEngine {
      * @return acceleration
      */
     public static Vector2 getAcceleration(float mass, Vector2 force) {
-    	return new Vector2(force).div(mass);
+    	return new Vector2(force).scl(1/mass);
     }
     
     /**

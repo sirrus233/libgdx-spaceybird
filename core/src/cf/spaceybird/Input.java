@@ -69,8 +69,8 @@ public class Input implements InputProcessor {
 		mouse.set(screenX, Gdx.graphics.getHeight() - screenY);
 						
 		//mouse vectors, normalized to work in terms of screen units instead of pixels
-		mouseDeltaNorm.set(getMouseDelta().div(AbstractScreen.ppuX,AbstractScreen.ppuY));
-		mouseNorm.set(getMouse().div(AbstractScreen.ppuX,AbstractScreen.ppuY));
+		mouseDeltaNorm.set(getMouseDelta().scl(1/AbstractScreen.ppuX,1/AbstractScreen.ppuY));
+		mouseNorm.set(getMouse().scl(1/AbstractScreen.ppuX,1/AbstractScreen.ppuY));
 	}
 	
 	@Override
