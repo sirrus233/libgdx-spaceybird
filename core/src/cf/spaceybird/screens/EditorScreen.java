@@ -21,6 +21,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class EditorScreen extends GameScreen {
+	private final float DEFAULT_ICON_RADIUS = 0.5f;
+	private final float DEFAULT_ICON_MASS = 1f;
 	
 	public enum EditorState {
 		WAITING, PLACING_OBSTACLE, PLACING_PLAYER
@@ -32,7 +34,7 @@ public class EditorScreen extends GameScreen {
 	public EditorScreen(Game g) {
 		super(g);
 		this.state = EditorState.WAITING;		
-		this.obstacleIcon = new Obstacle(new Vector2(Input.getMouseNorm()), 0.5f, 1);
+		this.obstacleIcon = new Obstacle(new Vector2(Input.getMouseNorm()), DEFAULT_ICON_RADIUS, DEFAULT_ICON_MASS);
 		LevelManager.setLevel(0);
 	}
 
@@ -142,7 +144,7 @@ public class EditorScreen extends GameScreen {
 			}
 			
 			if (Input.keys[Input.ESC]) {
-				this.obstacleIcon.getBounds().radius = 0.5f;
+				this.obstacleIcon.getBounds().radius = DEFAULT_ICON_RADIUS;
 				this.state = EditorState.WAITING;
 			}
 			break;
