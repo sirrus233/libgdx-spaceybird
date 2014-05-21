@@ -17,6 +17,7 @@ import cf.spaceybird.actors.Obstacle;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 public class EditorScreen extends GameScreen {
@@ -26,11 +27,12 @@ public class EditorScreen extends GameScreen {
 	}
 	
 	private EditorState state;
+	private Obstacle obstacleIcon;
 	
 	public EditorScreen(Game g) {
 		super(g);
 		this.state = EditorState.WAITING;		
-		
+		this.obstacleIcon = new Obstacle(new Vector2(Input.getMouseNorm()), 0.5f, 1);
 		LevelManager.setLevel(0);
 	}
 
@@ -40,10 +42,36 @@ public class EditorScreen extends GameScreen {
 		
 		switch (state) {	
 		case PLACING_OBSTACLE:
+			batch.setProjectionMatrix(gameCam.combined);
+			batch.begin();
+			if (obstacleIcon.getBounds().radius >= 1.5) {
+				batch.draw(Assets.planetLarge, this.obstacleIcon.getBounds().x - this.obstacleIcon.getBounds().radius, 
+						this.obstacleIcon.getBounds().y - this.obstacleIcon.getBounds().radius, 
+						2*this.obstacleIcon.getBounds().radius, 2*this.obstacleIcon.getBounds().radius);
+			} else if (obstacleIcon.getBounds().radius >= 1.0) {
+				batch.draw(Assets.planetMedium, this.obstacleIcon.getBounds().x - this.obstacleIcon.getBounds().radius, 
+						this.obstacleIcon.getBounds().y - this.obstacleIcon.getBounds().radius, 
+						2*this.obstacleIcon.getBounds().radius, 2*this.obstacleIcon.getBounds().radius);
+			} else {
+				batch.draw(Assets.planetSmall, this.obstacleIcon.getBounds().x - this.obstacleIcon.getBounds().radius, 
+						this.obstacleIcon.getBounds().y - this.obstacleIcon.getBounds().radius, 
+						2*this.obstacleIcon.getBounds().radius, 2*this.obstacleIcon.getBounds().radius);			
+			}
+			batch.end();
+			
 			batch.setProjectionMatrix(fontCam.combined);
 			batch.begin();
 			Assets.font.draw(batch, "Placing Obstacle", Gdx.graphics.getWidth()-15*ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
 			batch.end();
+			
+			if (debug) {
+				//Draw bounding boxes
+				debugRenderer.setProjectionMatrix(gameCam.combined);
+		        debugRenderer.begin(ShapeType.Line);
+		        debugRenderer.setColor(1, 0, 0, 1);
+		        debugRenderer.circle(this.obstacleIcon.getBounds().x, this.obstacleIcon.getBounds().y, this.obstacleIcon.getBounds().radius, 1200);  	
+		        debugRenderer.end();
+			}
 			break;
 			
 		case PLACING_PLAYER:
@@ -59,7 +87,7 @@ public class EditorScreen extends GameScreen {
 			Assets.font.draw(batch, "Press P or O", Gdx.graphics.getWidth()-15*ppuX, Gdx.graphics.getHeight()-0.3f*ppuY);
 			batch.end();
 			break;
-		}
+		}	
 	}
 
 	public void update(float delta) {
@@ -85,7 +113,7 @@ public class EditorScreen extends GameScreen {
 			
 		case PLACING_PLAYER:
 			super.getPlayer().setPosition(Input.getMouseNorm());
-			if (Input.buttonsClicked[Input.LEFT]){
+			if (Input.buttonsClicked[Input.LEFT]) {
 				LevelManager.setStartPos(Input.getMouseNorm());
 				this.state = EditorState.WAITING;
 			}
@@ -96,43 +124,27 @@ public class EditorScreen extends GameScreen {
 			break;
 			
 		case PLACING_OBSTACLE:
-			if (Input.keys['1']) {				
-				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 0.5f, 1));
-				this.state = EditorState.WAITING;
+			this.obstacleIcon.setPosition(Input.getMouseNorm());
+			
+			if (Input.mouseScrollDirection > 0) {
+				this.obstacleIcon.getBounds().radius -= 0.1f;
+			} else if (Input.mouseScrollDirection < 0) {
+				this.obstacleIcon.getBounds().radius += 0.1f;	
 			}
-			else if (Input.keys['2']) {
-				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 0.5f, 2));
-				this.state = EditorState.WAITING;
+			
+			if (Input.buttonsClicked[Input.LEFT]) {
+				super.getObstacles().add(new Obstacle(obstacleIcon));
 			}
-			else if (Input.keys['3']) {
-				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 1f, 3));
-				this.state = EditorState.WAITING;
-			}
-			else if (Input.keys['4']) {
-				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 1f, 4));
-				this.state = EditorState.WAITING;
-			}
-			else if (Input.keys['5']) {
-				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 2f, 5));
-				this.state = EditorState.WAITING;
-			}
-			else if (Input.keys['6']) {
-				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 2f, 6));
-				this.state = EditorState.WAITING;
-			}
-			else if (Input.keys['7']) {
-				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 1f, 7));
-				this.state = EditorState.WAITING;
-			}
-			else if (Input.keys['8']) {
-				super.getObstacles().add(new Obstacle(new Vector2(Input.getMouseNorm()), 0.5f, 8));
-				this.state = EditorState.WAITING;
-			}
-			else if (Input.keys['0']) {
+			
+			if (Input.keys['0']) {
 				super.getObstacles().clear();
 				this.state = EditorState.WAITING;
 			}
 			
+			if (Input.keys[Input.ESC]) {
+				this.obstacleIcon.getBounds().radius = 0.5f;
+				this.state = EditorState.WAITING;
+			}
 			break;
 			
 		default:
