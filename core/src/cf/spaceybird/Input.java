@@ -30,6 +30,7 @@ public class Input implements InputProcessor {
 	
 	public static boolean[] buttonsDown = new boolean[8];
 	public static boolean[] buttonsClicked = new boolean[8];
+	public static int mouseScrollDirection = 0;
 	
 	public static Vector2 getMouse() {
 		return new Vector2(mouse);
@@ -52,6 +53,7 @@ public class Input implements InputProcessor {
 		//in the even that no input is recieved
 		mouseDelta.set(0, 0);
 		mouseDeltaNorm.set(0, 0);
+		mouseScrollDirection = 0;
 		
 		for (int i = 0; i < keys.length; i++) {
 			keys[i] = false;
@@ -110,6 +112,7 @@ public class Input implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
+		mouseScrollDirection = amount;
 		return false;
 	}
 
