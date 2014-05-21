@@ -63,6 +63,10 @@ public class EditorScreen extends GameScreen {
 	}
 
 	public void update(float delta) {
+		if (this.state == EditorState.WAITING) { 
+			super.update(delta);	
+		}
+		
 		if (super.getGameState() == GameState.WAITING) {
 			if (Input.keys['o']) {
 				this.state = EditorState.PLACING_OBSTACLE;
@@ -83,6 +87,10 @@ public class EditorScreen extends GameScreen {
 			super.getPlayer().setPosition(Input.getMouseNorm());
 			if (Input.buttonsClicked[Input.LEFT]){
 				LevelManager.setStartPos(Input.getMouseNorm());
+				this.state = EditorState.WAITING;
+			}
+			if (Input.keys[Input.ESC]) {
+				super.getPlayer().setPosition(LevelManager.getStartPos());
 				this.state = EditorState.WAITING;
 			}
 			break;
@@ -129,10 +137,6 @@ public class EditorScreen extends GameScreen {
 			
 		default:
 			System.out.println("Error: Invalid state accessed from EditorScreen!");
-		}
-		
-		if (this.state == EditorState.WAITING) { 
-			super.update(delta);	
 		}
 	}
 	
