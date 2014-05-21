@@ -26,6 +26,10 @@ public class Obstacle {
 		this.bounds.radius = radius;
 	}
 	
+	public Obstacle(Obstacle o) {
+		this(o.getPosition(), o.getBounds().radius, o.getMass());
+	}
+	
 	public Circle getBounds() {
 		return bounds;
 	}
@@ -37,6 +41,15 @@ public class Obstacle {
 	//Get the current position vector of the obstacle
 	public Vector2 getPosition() {
 		return new Vector2(this.position);
+	}
+	
+	public void setPosition(float x, float y) {
+		this.position.set(x,y);
+		this.bounds.setPosition(this.position);
+	}
+	
+	public void setPosition(Vector2 p) {
+		this.setPosition(p.x, p.y);
 	}
 	
 	public void updatePosition(float deltaX, float deltaY) {
