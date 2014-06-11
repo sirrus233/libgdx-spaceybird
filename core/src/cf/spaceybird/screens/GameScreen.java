@@ -20,6 +20,8 @@ import com.badlogic.gdx.utils.Array;
 public class GameScreen extends AbstractScreen {
 	public final float LAUNCH_FORCE_SCALE = 8;
 	public final int MAX_PATHS = 10;
+	public final float SPACE_OFFSET_X = (1.5f * unitsX);
+	public final float SPACE_OFFSET_Y = (1.5f * unitsY);
 	
 	public enum GameState {
 		WAITING, AIMING, LAUNCHED, VICTORY
@@ -229,11 +231,11 @@ public class GameScreen extends AbstractScreen {
 				return true;
 			}
 		}
-		
-		boolean offRight = p.getBounds().x > unitsX + p.getBounds().radius;
-		boolean offLeft = p.getBounds().x < -p.getBounds().radius;
-		boolean offTop = p.getBounds().y > unitsY + p.getBounds().radius;
-		boolean offBottom = p.getBounds().y < -p.getBounds().radius;
+				
+		boolean offRight 	= p.getBounds().x > unitsX + p.getBounds().radius + SPACE_OFFSET_X;
+		boolean offLeft 	= p.getBounds().x < -unitsX - p.getBounds().radius - SPACE_OFFSET_X;
+		boolean offTop 		= p.getBounds().y > unitsY + p.getBounds().radius + SPACE_OFFSET_Y;
+		boolean offBottom 	= p.getBounds().y < -p.getBounds().radius - SPACE_OFFSET_Y;
 		
 		return  offRight || offLeft || offTop || offBottom;
 	}
