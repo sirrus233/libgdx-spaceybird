@@ -20,8 +20,8 @@ import com.badlogic.gdx.utils.Array;
 public class GameScreen extends AbstractScreen {
 	public final float LAUNCH_FORCE_SCALE = 8;
 	public final int MAX_PATHS = 10;
-	public final float SPACE_OFFSET_X = (1.5f * unitsX);
-	public final float SPACE_OFFSET_Y = (1.5f * unitsY);
+	public final float SPACE_OFFSET_X = 0.5f * unitsX;
+	public final float SPACE_OFFSET_Y = 0.5f * unitsY;
 	
 	public enum GameState {
 		WAITING, AIMING, LAUNCHED, VICTORY
@@ -222,7 +222,7 @@ public class GameScreen extends AbstractScreen {
 			//is an infinite loop condition because the player will never die. This generally happens in levels with no
 			//planets.
 			if (playerPredict.getVelocity().isZero()) { break; }
-		}	
+		}
 	}
 	
 	private boolean isDead(Player p) {
@@ -232,10 +232,10 @@ public class GameScreen extends AbstractScreen {
 			}
 		}
 				
-		boolean offRight 	= p.getBounds().x > unitsX + p.getBounds().radius + SPACE_OFFSET_X;
-		boolean offLeft 	= p.getBounds().x < -unitsX - p.getBounds().radius - SPACE_OFFSET_X;
-		boolean offTop 		= p.getBounds().y > unitsY + p.getBounds().radius + SPACE_OFFSET_Y;
-		boolean offBottom 	= p.getBounds().y < -p.getBounds().radius - SPACE_OFFSET_Y;
+		boolean offRight = p.getBounds().x > unitsX + p.getBounds().radius + SPACE_OFFSET_X;
+		boolean offLeft = p.getBounds().x < -p.getBounds().radius - SPACE_OFFSET_X;
+		boolean offTop = p.getBounds().y > unitsY + p.getBounds().radius + SPACE_OFFSET_Y;
+		boolean offBottom = p.getBounds().y < -p.getBounds().radius - SPACE_OFFSET_Y;
 		
 		return  offRight || offLeft || offTop || offBottom;
 	}
