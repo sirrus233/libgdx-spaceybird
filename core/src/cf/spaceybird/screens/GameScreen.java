@@ -209,7 +209,7 @@ public class GameScreen extends AbstractScreen {
 		Vector2 launch = new Vector2(LevelManager.getStartPos()).sub(this.player.getPosition());
 		this.playerPredict.setVelocity(launch.scl(LAUNCH_FORCE_SCALE));
 						
-		while (!isDead(this.playerPredict)) {
+		while (!isDead(this.playerPredict) && predictPath.size() < PREDICT_CAP) {
 			Vector2 gravForce = new Vector2();
 			for (Obstacle o : this.obstacles) {						
 				gravForce.add(PhysicsEngine.getGravForce(this.playerPredict, o));
