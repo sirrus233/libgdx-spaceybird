@@ -22,6 +22,7 @@ public class GameScreen extends AbstractScreen {
 	public final int MAX_PATHS = 10;
 	public final float SPACE_OFFSET_X = 0.5f * unitsX;
 	public final float SPACE_OFFSET_Y = 0.5f * unitsY;
+	public final int PREDICT_CAP = 2048;
 	
 	public enum GameState {
 		WAITING, AIMING, LAUNCHED, VICTORY
@@ -216,7 +217,8 @@ public class GameScreen extends AbstractScreen {
 			
 			this.playerPredict.setAcceleration(PhysicsEngine.getAcceleration(this.playerPredict.getMass(), gravForce));
 			this.playerPredict.setVelocity(PhysicsEngine.getVelocity(this.playerPredict.getVelocity(), this.playerPredict.getAcceleration(), .015f));
-			predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));
+			if (predictPath.size() < PREDICT_CAP )
+				{predictPath.add(this.playerPredict.updatePosition(this.playerPredict.getVelocity().scl(.015f)));}
 			
 			//This handles the corner case where if the player has no velocity after acceleration is applied, then there 
 			//is an infinite loop condition because the player will never die. This generally happens in levels with no
