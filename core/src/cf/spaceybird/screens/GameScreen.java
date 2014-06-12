@@ -23,6 +23,7 @@ public class GameScreen extends AbstractScreen {
 	public final float SPACE_OFFSET_X = 0.5f * unitsX;
 	public final float SPACE_OFFSET_Y = 0.5f * unitsY;
 	public final int PREDICT_CAP = 4096;
+	public final int HISTORY_CAP = 4096;
 	
 	public enum GameState {
 		WAITING, AIMING, LAUNCHED, VICTORY
@@ -186,7 +187,9 @@ public class GameScreen extends AbstractScreen {
 				
 				int lastIndex = this.pathHistory.size() - 1;
 				ArrayList<Vector2> travelPath = this.pathHistory.get(lastIndex);
-				travelPath.add(new Vector2(this.player.getPosition()));
+				if (travelPath.size() < HISTORY_CAP) {
+					travelPath.add(new Vector2(this.player.getPosition()));
+				}
 			}
 			break;
 			
