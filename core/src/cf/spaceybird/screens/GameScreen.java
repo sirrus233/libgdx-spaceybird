@@ -22,7 +22,7 @@ public class GameScreen extends AbstractScreen {
 	public final int MAX_PATHS = 10;
 	public final float SPACE_OFFSET_X = 0.5f * unitsX;
 	public final float SPACE_OFFSET_Y = 0.5f * unitsY;
-	public final int PREDICT_CAP = 256;
+	public final int PREDICT_CAP = 4096;
 	
 	public enum GameState {
 		WAITING, AIMING, LAUNCHED, VICTORY
